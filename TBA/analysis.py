@@ -7568,8 +7568,8 @@ for m in range(0, numMatches):
         winner = match['score_breakdown']['blue']
         loser  = match['score_breakdown']['red']
 
-    # change autoRotor --> autoRotor bonus (multiples of 20)
-    # change teleRotor --> total rotors (multiples of 40)
+    # move 40 points for rotors in auto to a rotor point total
+    # auto rotor points will be 20 point bonus only  
     numAutoRotors = winner['autoRotorPoints']/60;
     winner['autoRotorPoints']   -= numAutoRotors * 40; 
     winner['teleopRotorPoints'] += numAutoRotors * 40;
@@ -7580,6 +7580,10 @@ for m in range(0, numMatches):
 
     for s in range(0, numSubScore):
         diff[m,s] = winner[subScoreStr[s]] - loser[subScoreStr[s]]
+
+subScoreStr[SubScore.AUTO_ROTOR] = 'autoRotorBonus'
+subScoreStr[SubScore.TELE_ROTOR] = 'totalRotorPoints'
+
 
 print(*diff)
     
