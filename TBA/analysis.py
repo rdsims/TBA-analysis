@@ -1,6 +1,7 @@
 #from pytba import api as tba
 #from pytba import VERSION
 import numpy as np
+from enum import IntEnum
 
 #tba.set_api_key("Richard Sims", "FRC686", VERSION)
 #event = tba.event_get('2017vahay')
@@ -7528,19 +7529,37 @@ matches = [{'alliances': {'blue': {'score': 45,
   'time_string': None,
   'videos': []}]
 
-components = {
-    'autoMobilityPoints': 0,
-    'autoFuelPoints': 1,
-    'teleopFuelPoints': 2,
-    'autoRotorPoints': 3,
-    'teleopRotorPoints': 4,
-    'teleopTakeoffPoints': 5,
-    'foulPoints': 6
-}
+class SubScore(IntEnum):
+    AUTO_MOBILITY = 0
+    AUTO_FUEL = 1
+    TELE_FUEL = 2
+    BONUS_FUEL = 3
+    AUTO_ROTOR = 4
+    TELE_ROTOR = 5
+    BONUS_ROTOR = 6
+    CLIMB = 7
+    FOULS = 8
 
-diff = np.array([len(matches), len(components)])
+numSubScore = SubScore.FOULS.value + 1
 
-for match in matches:
+subScoreStr = {}    
+subScoreStr[SubScore.AUTO_MOBILITY] = 'autoMobilityPoints'
+subScoreStr[SubScore.AUTO_FUEL] = 'autoFuelPoints'
+subScoreStr[SubScore.TELE_FUEL] = 'teleopFuelPoints'
+subScoreStr[SubScore.BONUS_FUEL] = 'kPaBonusPoints'
+subScoreStr[SubScore.AUTO_ROTOR] = 'autoRotorPoints'
+subScoreStr[SubScore.TELE_ROTOR] = 'teleopRotorPoints'
+subScoreStr[SubScore.BONUS_ROTOR] = 'rotorBonusPoints'
+subScoreStr[SubScore.CLIMB] = 'teleopTakeoffPoints'
+subScoreStr[SubScore.FOULS] = 'foulPoints'
+
+numMatches = len(matches)
+    
+diff = np.zeros((numMatches, numSubScore))
+
+for m in range(0, numMatches):
+
+    match = matches[m]
 
     if match['alliances']['red']['score'] >= match['alliances']['blue']['score']:
         winner = match['score_breakdown']['red']
@@ -7549,8 +7568,19 @@ for match in matches:
         winner = match['score_breakdown']['blue']
         loser  = match['score_breakdown']['red']
 
-    for c in components:
-        diff[match][components[c]] = winner[c] - loser[c]
+    # change autoRotor --> autoRotor bonus (multiples of 20)
+    # change teleRotor --> total rotors (multiples of 40)
+    numAutoRotors = winner['autoRotorPoints']/60;
+    winner['autoRotorPoints']   -= numAutoRotors * 40; 
+    winner['teleopRotorPoints'] += numAutoRotors * 40;
 
-    for c in components:
-        print(diff[match])
+    numAutoRotors = loser['autoRotorPoints']/60;
+    loser['autoRotorPoints']   -= numAutoRotors * 40; 
+    loser['teleopRotorPoints'] += numAutoRotors * 40;
+
+    for s in range(0, numSubScore):
+        diff[m,s] = winner[subScoreStr[s]] - loser[subScoreStr[s]]
+
+print(*diff)
+    
+    
