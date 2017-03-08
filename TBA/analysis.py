@@ -7542,49 +7542,90 @@ class SubScore(IntEnum):
 
 numSubScore = SubScore.FOULS.value + 1
 
-subScoreStr = {}    
-subScoreStr[SubScore.AUTO_MOBILITY] = 'autoMobilityPoints'
-subScoreStr[SubScore.AUTO_FUEL] = 'autoFuelPoints'
-subScoreStr[SubScore.TELE_FUEL] = 'teleopFuelPoints'
-subScoreStr[SubScore.BONUS_FUEL] = 'kPaBonusPoints'
-subScoreStr[SubScore.AUTO_ROTOR] = 'autoRotorPoints'
-subScoreStr[SubScore.TELE_ROTOR] = 'teleopRotorPoints'
-subScoreStr[SubScore.BONUS_ROTOR] = 'rotorBonusPoints'
-subScoreStr[SubScore.CLIMB] = 'teleopTakeoffPoints'
-subScoreStr[SubScore.FOULS] = 'foulPoints'
+fieldStr = {}    
+fieldStr[SubScore.AUTO_MOBILITY] = 'match_number'
+fieldStr[SubScore.AUTO_FUEL] = 'comp_level'
+fieldStr[SubScore.TELE_FUEL] = 'red_team_1'
+fieldStr[SubScore.BONUS_FUEL] = 'kPaBonusPoints'
+fieldStr[SubScore.AUTO_ROTOR] = 'autoRotorPoints'
+fieldStr[SubScore.TELE_ROTOR] = 'teleopRotorPoints'
+fieldStr[SubScore.BONUS_ROTOR] = 'rotorBonusPoints'
+fieldStr[SubScore.CLIMB] = 'teleopTakeoffPoints'
+fieldStr[SubScore.FOULS] = 'foulPoints'
+
+fieldStr = {}    
+fieldStr[SubScore.AUTO_MOBILITY] = 'autoMobilityPoints'
+fieldStr[SubScore.AUTO_FUEL] = 'autoFuelPoints'
+fieldStr[SubScore.TELE_FUEL] = 'teleopFuelPoints'
+fieldStr[SubScore.BONUS_FUEL] = 'kPaBonusPoints'
+fieldStr[SubScore.AUTO_ROTOR] = 'autoRotorPoints'
+fieldStr[SubScore.TELE_ROTOR] = 'teleopRotorPoints'
+fieldStr[SubScore.BONUS_ROTOR] = 'rotorBonusPoints'
+fieldStr[SubScore.CLIMB] = 'teleopTakeoffPoints'
+fieldStr[SubScore.FOULS] = 'foulPoints'
 
 numMatches = len(matches)
-    
-diff = np.zeros((numMatches, numSubScore))
+
+rec = np.zeros(2*numMatches, dtype=[('match','i4'),
+                                    ('comp', 'U4'),
+                                    ('alliance', 'U4'),
+                                    ('team1', 'i4'),
+                                    ('team2', 'i4'),
+                                    ('team3', 'i4'),
+                                    ('score', 'i4'),
+                                    ('autoMobility', 'i4'),
+                                    ('autoFuel', 'i4'),
+                                    ('teleFuel', 'i4'),
+                                    ('fuelBonus', 'i4'),
+                                    ('autoRotor', 'i4'),
+                                    ('totalRotor', 'i4'),
+                                    ('rotorBonus', 'i4'),
+                                    ('climb', 'i4'),
+                                    ('fouls', 'i4')])    
+
+
+alliances = {'red', 'blue'}
+row = 0
 
 for m in range(0, numMatches):
 
     match = matches[m]
 
-    if match['alliances']['red']['score'] >= match['alliances']['blue']['score']:
-        winner = match['score_breakdown']['red']
-        loser  = match['score_breakdown']['blue']
-    else:
-        winner = match['score_breakdown']['blue']
-        loser  = match['score_breakdown']['red']
+    for alliance in alliances:
 
-    # move 40 points for rotors in auto to a rotor point total
-    # auto rotor points will be 20 point bonus only  
-    numAutoRotors = winner['autoRotorPoints']/60;
-    winner['autoRotorPoints']   -= numAutoRotors * 40; 
-    winner['teleopRotorPoints'] += numAutoRotors * 40;
-
-    numAutoRotors = loser['autoRotorPoints']/60;
-    loser['autoRotorPoints']   -= numAutoRotors * 40; 
-    loser['teleopRotorPoints'] += numAutoRotors * 40;
-
-    for s in range(0, numSubScore):
-        diff[m,s] = winner[subScoreStr[s]] - loser[subScoreStr[s]]
-
-subScoreStr[SubScore.AUTO_ROTOR] = 'autoRotorBonus'
-subScoreStr[SubScore.TELE_ROTOR] = 'totalRotorPoints'
+        # move 40 points for rotors in auto to a rotor point total
+        # auto rotor points will be 20 point bonus only  
+        numAutoRotors = match['score_breakdown'][alliance]['autoRotorPoints']/60;
+        match['score_breakdown'][alliance]['autoRotorPoints']   -= numAutoRotors * 40; 
+        match['score_breakdown'][alliance]['teleopRotorPoints'] += numAutoRotors * 40;
 
 
-print(*diff)
-    
-    
+        team1 = int(match['alliances'][alliance]['teams'][0].replace("frc", ""))
+        team2 = int(match['alliances'][alliance]['teams'][1].replace("frc", ""))
+        team3 = int(match['alliances'][alliance]['teams'][2].replace("frc", ""))
+
+        rec[row] = (  match['match_number'],
+                      match['comp_level'],
+                      alliance,
+                      team1,
+                      team2,
+                      team3,
+                      match['alliances'][alliance]['score'],
+                      match['score_breakdown'][alliance]['autoMobilityPoints'],
+                      match['score_breakdown'][alliance]['autoFuelPoints'],
+                      match['score_breakdown'][alliance]['teleopFuelPoints'],
+                      match['score_breakdown'][alliance]['kPaBonusPoints'],
+                      match['score_breakdown'][alliance]['autoRotorPoints'],
+                      match['score_breakdown'][alliance]['teleopRotorPoints'],
+                      match['score_breakdown'][alliance]['rotorBonusPoints'],
+                      match['score_breakdown'][alliance]['teleopTakeoffPoints'],
+                      match['score_breakdown'][alliance]['foulPoints'])
+
+        row += 1
+
+
+names = rec.dtype.names
+header = ','.join(names) + '\n'
+with open('2017vahay.csv', 'wb') as csvFile:
+    csvFile.write(header.encode())
+    np.savetxt(csvFile, rec, '%s', delimiter=",")
