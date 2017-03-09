@@ -2,10 +2,6015 @@
 #from pytba import VERSION
 import numpy as np
 from enum import IntEnum
+import time
+from time import strftime
+from datetime import date
+
 
 #tba.set_api_key("Richard Sims", "FRC686", VERSION)
-#event = tba.event_get('2017vahay')
-#matches = event.matches
+
+event_list = [
+  {
+    "key": "2017abca",
+    "website": "http://frcwest.com/",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Western Canada Regional",
+    "short_name": "Western Canada",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "The Olympic Oval\nUniversity of Calgary\nCalgary, AB T2N 1N4\nCanada",
+    "event_district": 0,
+    "week": 5,
+    "location": "Calgary, AB T2N 1N4, Canada",
+    "event_code": "abca",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Edmonton",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-05",
+    "event_type": 0
+  },
+  {
+    "key": "2017alhu",
+    "website": "http://firstinalabama.org/events/frc-events/rocket-city-regional/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Rocket City Regional",
+    "short_name": "Rocket City",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Von Braun Center\n700 Monroe Street SW\nHuntsville, AL 35801\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Huntsville, AL 35801, USA",
+    "event_code": "alhu",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017arc",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-29",
+    "name": "Archimedes Division",
+    "short_name": "Archimedes",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "America's Center/Dome\nSt. Louis, MO, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "St. Louis, MO, USA",
+    "event_code": "arc",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-26",
+    "event_type": 3
+  },
+  {
+    "key": "2017arli",
+    "website": "http://arfirst.org",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "Arkansas Rock City Regional",
+    "short_name": "Arkansas Rock City",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Arkansas State Fairgrounds - Barton Coliseum\nBarton Coliseum\n2600 Howard Street\nLittle Rock, AR 72206\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "Little Rock, AR 72206, USA",
+    "event_code": "arli",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstinspires1"
+      },
+      {
+        "type": "twitch",
+        "channel": "firstinspires2"
+      }
+    ],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017aurb",
+    "website": "https://www.chiefdelphi.com/forums/showthread.php?p=1647081",
+    "official": False,
+    "end_date": "2017-02-19",
+    "name": "Redbacks Scrimmage",
+    "short_name": "Redbacks Scrimmage",
+    "facebook_eid": "",
+    "event_district_string": None,
+    "venue_address": None,
+    "event_district": 0,
+    "week": None,
+    "location": "Sydney, Austrialia",
+    "event_code": "aurb",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "dE3AKyN0-NA"
+      }
+    ],
+    "timezone": None,
+    "alliances": [],
+    "event_type_string": "Preseason",
+    "start_date": "2017-02-19",
+    "event_type": 100
+  },
+  {
+    "key": "2017ausc",
+    "website": "https://firstaustralia.org/",
+    "official": True,
+    "end_date": "2017-03-15",
+    "name": "Southern Cross Regional",
+    "short_name": "Southern Cross",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Sydney Olympic Park Sports Centre\nOlympic Boulevard\nSydney Olympic Park, NSW 2127\nAustralia",
+    "event_district": 0,
+    "week": 1,
+    "location": "Sydney Olympic Park, NSW 2127, Australia",
+    "event_code": "ausc",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "Australia/Sydney",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-13",
+    "event_type": 0
+  },
+  {
+    "key": "2017ausp",
+    "website": "https://firstaustralia.org/",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "South Pacific Regional",
+    "short_name": "South Pacific",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Sydney Olympic Park Sports Centre\nOlympic Boulevard\nSydney Olympic Park, NSW 2127\nAustralia",
+    "event_district": 0,
+    "week": 2,
+    "location": "Sydney Olympic Park, NSW 2127, Australia",
+    "event_code": "ausp",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "Australia/Sydney",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-16",
+    "event_type": 0
+  },
+  {
+    "key": "2017azfl",
+    "website": "http://www.azfirst.org/",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "Arizona North Regional",
+    "short_name": "Arizona North",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "J. Lawrence Walkup Skydome - Northern Arizona University\n1701 S. San Francisco Street\nFlagstaff, AZ 86011\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "Flagstaff, AZ 86011, USA",
+    "event_code": "azfl",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Phoenix",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017azpx",
+    "website": "http://www.azfirst.org/",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Arizona West Regional",
+    "short_name": "Arizona West",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Grand Canyon University Arena\n3300 W. Camelback Road\nPhoenix, AZ 85017\nUSA",
+    "event_district": 0,
+    "week": 5,
+    "location": "Phoenix, AZ 85017, USA",
+    "event_code": "azpx",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Phoenix",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-05",
+    "event_type": 0
+  },
+  {
+    "key": "2017cada",
+    "website": "http://www.firstsac.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Sacramento Regional",
+    "short_name": "Sacramento",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "UC Davis ARC Pavilion\nCorner of Orchard and LaRue\nDavis, CA 95616\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Davis, CA 95616, USA",
+    "event_code": "cada",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017cair",
+    "website": "http://www.firstoc.org/",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "Orange County Regional",
+    "short_name": "Orange County",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "University of California, Irvine\nBren Events Center\n100 Bren Events Center\nIrvine, CA 92697\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "Irvine, CA 92697, USA",
+    "event_code": "cair",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017calb",
+    "website": "http://www.firstlaregional.com",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "Los Angeles Regional",
+    "short_name": "Los Angeles",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Walter Pyramid\n1250 N Bellflower Blvd\nLong Beach State University\nLong Beach, CA 90840\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Long Beach, CA 90840, USA",
+    "event_code": "calb",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-23",
+    "event_type": 0
+  },
+  {
+    "key": "2017cama",
+    "website": "http://www.cvrobotics.org/frc/regional.html",
+    "official": True,
+    "end_date": "2017-03-12",
+    "name": "Central Valley Regional",
+    "short_name": "Central Valley",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Madera South High School\n705 W. Pecan Avenue\nMadera, CA 93637\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "Madera, CA 93637, USA",
+    "event_code": "cama",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstinspires3"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-09",
+    "event_type": 0
+  },
+  {
+    "key": "2017capb",
+    "website": "http://www.firstinspires.org/node/12396",
+    "official": False,
+    "end_date": "2017-02-19",
+    "name": "Pre-Bag Scrimmage",
+    "short_name": "Pre-Bag Scrimmage",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Valencia High School\n500 N. Bradford Ave.\nPlacentia, California, United States",
+    "event_district": 0,
+    "week": None,
+    "location": "Placentia, CA, USA",
+    "event_code": "capb",
+    "year": 2017,
+    "webcast": [],
+    "timezone": None,
+    "alliances": [],
+    "event_type_string": "Preseason",
+    "start_date": "2017-02-18",
+    "event_type": 100
+  },
+  {
+    "key": "2017cars",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-29",
+    "name": "Carson Division",
+    "short_name": "Carson",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "America's Center/Dome\nSt. Louis, MO, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "St. Louis, MO, USA",
+    "event_code": "cars",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-26",
+    "event_type": 3
+  },
+  {
+    "key": "2017carv",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-22",
+    "name": "Carver Division",
+    "short_name": "Carver",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "George R. Brown Convention Center\nHouston, TX, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Houston, TX, USA",
+    "event_code": "carv",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-19",
+    "event_type": 3
+  },
+  {
+    "key": "2017casd",
+    "website": "http://sandiegoregional.com/",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "San Diego Regional presented by Qualcomm",
+    "short_name": "San Diego",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Del Mar Fairgrounds Arena Complex\n2260 Jimmy Durante Blvd\nDel Mar, CA 92014\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "Del Mar, CA 92014, USA",
+    "event_code": "casd",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "ustream",
+        "channel": "22125105"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017casf",
+    "website": "http://www.firstsfbay.org",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "San Francisco Regional",
+    "short_name": "San Francisco",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "St. Ignatius College Preparatory\n2001 37th Avenue\nSan Francisco, CA 94116\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "San Francisco, CA 94116, USA",
+    "event_code": "casf",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-16",
+    "event_type": 0
+  },
+  {
+    "key": "2017casj",
+    "website": "http://www.firstsv.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "Silicon Valley Regional",
+    "short_name": "Silicon Valley",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "San Jose State University - The Event Center\n290 South 7th Street\nSan Jose, CA 95112\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "San Jose, CA 95112, USA",
+    "event_code": "casj",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017cave",
+    "website": "http://www.frcventuraregional.com/",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "Ventura Regional",
+    "short_name": "Ventura",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Ventura College\n4667 Telegraph Road\nVentura, CA 93003\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "Ventura, CA 93003, USA",
+    "event_code": "cave",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-15",
+    "event_type": 0
+  },
+  {
+    "key": "2017chcmp",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "FIRST Chesapeake District Championship sponsored by Booz Allen Hamilton",
+    "short_name": "Chesapeake",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "Virginia Commonwealth University\nSiegel Center\n1200 West Broad Street\nRichmond, VA 23284\nUSA",
+    "event_district": 6,
+    "week": 5,
+    "location": "Richmond, VA 23284, USA",
+    "event_code": "chcmp",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-05",
+    "event_type": 2
+  },
+  {
+    "key": "2017ckw0",
+    "website": "https://www.team2052.com/2017-week-zero/",
+    "official": None,
+    "end_date": "2017-02-18",
+    "name": "Centurion-Krawler Week Zero",
+    "short_name": "Centurion-Krawler",
+    "facebook_eid": "",
+    "event_district_string": None,
+    "venue_address": None,
+    "event_district": 0,
+    "week": None,
+    "location": "Circle Pines, MN, USA",
+    "event_code": "ckw0",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "AXb42SIge0U"
+      }
+    ],
+    "timezone": None,
+    "alliances": [],
+    "event_type_string": "Preseason",
+    "start_date": "2017-02-18",
+    "event_type": 100
+  },
+  {
+    "key": "2017cmpmo",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-29",
+    "name": "Einstein (St. Louis) Field",
+    "short_name": "Einstein (St. Louis)",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "America's Center/Dome\nSt. Louis, MO, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "St. Louis, MO, USA",
+    "event_code": "cmpmo",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Finals",
+    "start_date": "2017-04-29",
+    "event_type": 4
+  },
+  {
+    "key": "2017cmptx",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-22",
+    "name": "Einstein (Houston) Field",
+    "short_name": "Einstein (Houston)",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "George R. Brown Convention Center\nHouston, TX, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Houston, TX, USA",
+    "event_code": "cmptx",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Finals",
+    "start_date": "2017-04-22",
+    "event_type": 4
+  },
+  {
+    "key": "2017code",
+    "website": "http://coloradofirst.org/COFIRST/programs/frc/colorado-regional/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Colorado Regional",
+    "short_name": "Colorado",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "University of Denver - Daniel L. Ritchie Center\n2201 East Asbury Ave\nDenver, CO 80210\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Denver, CO 80210, USA",
+    "event_code": "code",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "ustream",
+        "channel": "7744399"
+      }
+    ],
+    "timezone": "America/Denver",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017cthar",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-04-02",
+    "name": "NE District - Hartford Event",
+    "short_name": "Hartford",
+    "facebook_eid": "1801135413498726",
+    "event_district_string": "New England",
+    "venue_address": "Hartford Public High School\n55 Forest Street\nHartford, CT 06105\nUSA",
+    "event_district": 3,
+    "week": 4,
+    "location": "Hartford, CT 06105, USA",
+    "event_code": "cthar",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_red"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-31",
+    "event_type": 1
+  },
+  {
+    "key": "2017ctss",
+    "website": "http://aceshigh176.org/ss-scrimmage",
+    "official": False,
+    "end_date": "2017-02-18",
+    "name": "Suffield Shakedown Scrimmage",
+    "short_name": "Suffield Shakedown",
+    "facebook_eid": "",
+    "event_district_string": None,
+    "venue_address": "Suffield High School\n1060 Sheldon Street\nWest Suffield, CT 06093\nUSA",
+    "event_district": 0,
+    "week": None,
+    "location": "West Suffield, CT 06093, USA",
+    "event_code": "ctss",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Preseason",
+    "start_date": "2017-02-18",
+    "event_type": 100
+  },
+  {
+    "key": "2017ctwat",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "NE District - Waterbury Event",
+    "short_name": "Waterbury",
+    "facebook_eid": "1435013759847081",
+    "event_district_string": "New England",
+    "venue_address": "Wilby High School\n460 Buck Hill Road\nWaterbury, CT 06704\nUSA",
+    "event_district": 3,
+    "week": 0,
+    "location": "Waterbury, CT 06704, USA",
+    "event_code": "ctwat",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_red"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc3464",
+          "frc177",
+          "frc178"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc2067",
+          "frc716",
+          "frc4055"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc236",
+          "frc3654",
+          "frc181"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc195",
+          "frc558",
+          "frc228"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc176",
+          "frc175",
+          "frc2170"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc5129",
+          "frc4097",
+          "frc5856"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc2064",
+          "frc230",
+          "frc4557"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc1099",
+          "frc1071",
+          "frc1124"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017cur",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-29",
+    "name": "Curie Division",
+    "short_name": "Curie",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "America's Center/Dome\nSt. Louis, MO, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "St. Louis, MO, USA",
+    "event_code": "cur",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-26",
+    "event_type": 3
+  },
+  {
+    "key": "2017dal",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-29",
+    "name": "Daly Division",
+    "short_name": "Daly",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "America's Center/Dome\nSt. Louis, MO, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "St. Louis, MO, USA",
+    "event_code": "dal",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-26",
+    "event_type": 3
+  },
+  {
+    "key": "2017dar",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-29",
+    "name": "Darwin Division",
+    "short_name": "Darwin",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "America's Center/Dome\nSt. Louis, MO, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "St. Louis, MO, USA",
+    "event_code": "dar",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-26",
+    "event_type": 3
+  },
+  {
+    "key": "2017flor",
+    "website": "http://orlandofrc.org",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "Orlando Regional",
+    "short_name": "Orlando",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "CFE Arena at the University of Central Florida\n12777 Gemini Blvd N\nOrlando, FL 32816\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "Orlando, FL 32816, USA",
+    "event_code": "flor",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017flwp",
+    "website": "",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "South Florida Regional ",
+    "short_name": "South Florida",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Palm Beach Convention Center\n650 Okeechobee Blvd\nWest Palm Beach, FL 33401\nUSA",
+    "event_district": 0,
+    "week": 0,
+    "location": "West Palm Beach, FL 33401, USA",
+    "event_code": "flwp",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "axuXdjrs_sU"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc6001",
+          "frc4481",
+          "frc2556"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1744",
+          "frc694",
+          "frc6038"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc1523",
+          "frc125",
+          "frc6404"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": {
+          "in": "frc6225",
+          "out": "frc6388"
+        },
+        "name": "Alliance 4",
+        "picks": [
+          "frc3653",
+          "frc386",
+          "frc6388"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc179",
+          "frc233",
+          "frc4592"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc2152",
+          "frc2383",
+          "frc59"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc2641",
+          "frc263",
+          "frc4471"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc5819",
+          "frc1251",
+          "frc348"
+        ]
+      }
+    ],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-01",
+    "event_type": 0
+  },
+  {
+    "key": "2017gaalb",
+    "website": "http://www.gafirst.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "PCH District - Albany Event",
+    "short_name": "Albany",
+    "facebook_eid": None,
+    "event_district_string": "Peachtree",
+    "venue_address": "Albany Civic Center\n100 W. Oglethorpe Blvd\nAlbany, GA 31701\nUSA",
+    "event_district": 8,
+    "week": 3,
+    "location": "Albany, GA 31701, USA",
+    "event_code": "gaalb",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017gacmp",
+    "website": "http://www.gafirst.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Peachtree State Championship",
+    "short_name": "Peachtree",
+    "facebook_eid": None,
+    "event_district_string": "Peachtree",
+    "venue_address": "University of Georgia - Stegeman Coliseum\n100 Smith Street\nAthens, GA 30602\nUSA",
+    "event_district": 8,
+    "week": 5,
+    "location": "Athens, GA 30602, USA",
+    "event_code": "gacmp",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-05",
+    "event_type": 2
+  },
+  {
+    "key": "2017gacol",
+    "website": "http://www.gafirst.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "PCH District - Columbus Event",
+    "short_name": "Columbus",
+    "facebook_eid": None,
+    "event_district_string": "Peachtree",
+    "venue_address": "Columbus State University\n4225 University Avenue\nColumbus, GA 31907\nUSA",
+    "event_district": 8,
+    "week": 2,
+    "location": "Columbus, GA 31907, USA",
+    "event_code": "gacol",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-16",
+    "event_type": 1
+  },
+  {
+    "key": "2017gadal",
+    "website": "http://www.gafirst.org",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "PCH District - Dalton Event",
+    "short_name": "Dalton",
+    "facebook_eid": None,
+    "event_district_string": "Peachtree",
+    "venue_address": "Dalton Convention Center\n2211 Dug Gap Battle Road\nDalton, GA 30720\nUSA",
+    "event_district": 8,
+    "week": 1,
+    "location": "Dalton, GA 30720, USA",
+    "event_code": "gadal",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-09",
+    "event_type": 1
+  },
+  {
+    "key": "2017gagai",
+    "website": "http://www.gafirst.org",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "PCH District - Gainesville Event",
+    "short_name": "Gainesville",
+    "facebook_eid": None,
+    "event_district_string": "Peachtree",
+    "venue_address": "Riverside Military Academy\n2001 Riverside Drive\nGainesville, GA 30501\nUSA",
+    "event_district": 8,
+    "week": 0,
+    "location": "Gainesville, GA 30501, USA",
+    "event_code": "gagai",
+    "year": 2017,
+    "webcast": [
+      {
+        "date": "2017-03-04",
+        "type": "youtube",
+        "channel": "bAK0K1_AA7c"
+      },
+      {
+        "date": "2017-03-05",
+        "type": "youtube",
+        "channel": "gaVv6yZifQ0"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc4941",
+          "frc4188",
+          "frc6325"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc5293",
+          "frc1002",
+          "frc1311"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc5608",
+          "frc4189",
+          "frc3998"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc1648",
+          "frc1746",
+          "frc832"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4468",
+          "frc1683",
+          "frc5582"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc6705",
+          "frc4112",
+          "frc4026"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc5132",
+          "frc4910",
+          "frc6023"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc5734",
+          "frc5332",
+          "frc1261"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017gal",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-22",
+    "name": "Galileo Division",
+    "short_name": "Galileo",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "George R. Brown Convention Center\nHouston, TX, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Houston, TX, USA",
+    "event_code": "gal",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-19",
+    "event_type": 3
+  },
+  {
+    "key": "2017gush",
+    "website": "http://share.hisports.tv/HiSportVideo.aspx?c=6208",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "Shenzhen Regional",
+    "short_name": "Shenzhen",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "The Sports Center of Shenzhen University\nNo. 2032 Liuxian Road\nNanshan District\nShenzhen City, 44 518000\nChina",
+    "event_district": 0,
+    "week": 1,
+    "location": "Shenzhen City, 44 518000, China",
+    "event_code": "gush",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "Asia/Shanghai",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017hiho",
+    "website": "http://www.friendsofhawaiirobotics.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "Hawaii Regional",
+    "short_name": "Hawaii",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "University of Hawaii at Manoa\nStan Sheriff Center\nHonolulu, HI 96822\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "Honolulu, HI 96822, USA",
+    "event_code": "hiho",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "Pacific/Honolulu",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017hop",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-22",
+    "name": "Hopper Division",
+    "short_name": "Hopper",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "George R. Brown Convention Center\nHouston, TX, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Houston, TX, USA",
+    "event_code": "hop",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-19",
+    "event_type": 3
+  },
+  {
+    "key": "2017iacf",
+    "website": "http://iafirst.org/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Iowa Regional",
+    "short_name": "Iowa",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "McLeod Center/UNI Dome\n2501 Hudson Road\nCedar Falls, IA 50614\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Cedar Falls, IA 50614, USA",
+    "event_code": "iacf",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017idbo",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "Idaho Regional",
+    "short_name": "Idaho",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Boise State University at Taco Bell Arena\n1401 Bronco Lane\nBoise, ID 83725\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "Boise, ID 83725, USA",
+    "event_code": "idbo",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Denver",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017ilch",
+    "website": "http://www.firstillinoisrobotics.org/frc/events/midwest-regional.html",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "Midwest Regional",
+    "short_name": "Midwest",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "UIC Pavilion \nUniversity of Illinois, Chicago\n525 S. Racine Ave\nChicago, IL 60607\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "Chicago, IL 60607, USA",
+    "event_code": "ilch",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017ilpe",
+    "website": "http://www.firstillinoisrobotics.org/frc/events/central-illinois-regional/",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "Central Illinois Regional",
+    "short_name": "Central Illinois",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Renaissance Coliseum - Bradley University\n1600 W. Main Street\nPeoria, IL 61625\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "Peoria, IL 61625, USA",
+    "event_code": "ilpe",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "ustream",
+        "channel": "17326529"
+      }
+    ],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-15",
+    "event_type": 0
+  },
+  {
+    "key": "2017incmp",
+    "website": "http://www.indianafirst.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Indiana State Championship",
+    "short_name": "Indiana",
+    "facebook_eid": None,
+    "event_district_string": "Indiana",
+    "venue_address": "Huntington North High School\n450 McGahn Street\nHuntington, IN 46750\nUSA",
+    "event_district": 5,
+    "week": 5,
+    "location": "Huntington, IN 46750, USA",
+    "event_code": "incmp",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7067444",
+        "channel": "17904105"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-06",
+    "event_type": 2
+  },
+  {
+    "key": "2017inmis",
+    "website": "http://www.indianafirst.org",
+    "official": True,
+    "end_date": "2017-03-12",
+    "name": "IN District - St. Joseph Event",
+    "short_name": "St. Joseph",
+    "facebook_eid": None,
+    "event_district_string": "Indiana",
+    "venue_address": "Penn High School\n56100 Bittersweet Road\nMishawaka, IN 46545\nUSA",
+    "event_district": 5,
+    "week": 1,
+    "location": "Mishawaka, IN 46545, USA",
+    "event_code": "inmis",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7067396",
+        "channel": "17904105"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-10",
+    "event_type": 1
+  },
+  {
+    "key": "2017inpmh",
+    "website": "http://www.indianafirst.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "IN District - Perry Meridian Event",
+    "short_name": "Perry Meridian",
+    "facebook_eid": None,
+    "event_district_string": "Indiana",
+    "venue_address": "Perry Meridian High School\n401 W. Meridian School Road\nIndianapolis, IN 46217\nUSA",
+    "event_district": 5,
+    "week": 3,
+    "location": "Indianapolis, IN 46217, USA",
+    "event_code": "inpmh",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7067424",
+        "channel": "17904105"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017inwla",
+    "website": "http://www.indianafirst.org",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "IN District - Tippecanoe Event",
+    "short_name": "Tippecanoe",
+    "facebook_eid": None,
+    "event_district_string": "Indiana",
+    "venue_address": "William Henry Harrison High School\n5701 N 50 W\nWest Lafayette, IN 47906\nUSA",
+    "event_district": 5,
+    "week": 0,
+    "location": "West Lafayette, IN 47906, USA",
+    "event_code": "inwla",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7067191",
+        "channel": "17904105"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc4272",
+          "frc1501",
+          "frc447"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc461",
+          "frc829",
+          "frc141"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc234",
+          "frc1018",
+          "frc4926"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc292",
+          "frc1024",
+          "frc6498"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc1529",
+          "frc5188",
+          "frc5010"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc3940",
+          "frc4982",
+          "frc3947"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc4103",
+          "frc1741",
+          "frc868"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc3559",
+          "frc3147",
+          "frc1747"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017iri",
+    "website": "",
+    "official": False,
+    "end_date": "2017-07-15",
+    "name": "Indiana Robotics Invitational",
+    "short_name": "IRI",
+    "facebook_eid": "",
+    "event_district_string": None,
+    "venue_address": None,
+    "event_district": 0,
+    "week": None,
+    "location": "Indianapolis, IN, USA",
+    "event_code": "iri",
+    "year": 2017,
+    "webcast": [],
+    "timezone": None,
+    "alliances": [],
+    "event_type_string": "Offseason",
+    "start_date": "2017-07-14",
+    "event_type": 99
+  },
+  {
+    "key": "2017iscmp",
+    "website": "http://firstisrael.org.il",
+    "official": True,
+    "end_date": "2017-03-30",
+    "name": "FIRST Israel District Championship",
+    "short_name": "Israel",
+    "facebook_eid": None,
+    "event_district_string": "Israel",
+    "venue_address": "Menora Mivtachim Arena\n51 Yigal Allon Street\nTel Aviv-Yafo, TA 00000\nIsrael",
+    "event_district": 10,
+    "week": 3,
+    "location": "Tel Aviv-Yafo, TA 00000, Israel",
+    "event_code": "iscmp",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "cUkaCN6Be8g"
+      }
+    ],
+    "timezone": "Asia/Jerusalem",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-03-28",
+    "event_type": 2
+  },
+  {
+    "key": "2017isde1",
+    "website": "http://firstisrael.org.il",
+    "official": True,
+    "end_date": "2017-03-07",
+    "name": "ISR District Event #1",
+    "short_name": "ISR",
+    "facebook_eid": None,
+    "event_district_string": "Israel",
+    "venue_address": "Technion Sports Center\nTechnion\nHaifa, HA 00000\nIsrael",
+    "event_district": 10,
+    "week": 0,
+    "location": "Haifa, HA 00000, Israel",
+    "event_code": "isde1",
+    "year": 2017,
+    "webcast": [
+      {
+        "date": "2017-03-06",
+        "type": "youtube",
+        "channel": "1rgV6IYoa28"
+      },
+      {
+        "date": "2017-03-07",
+        "type": "youtube",
+        "channel": "bYasGkeO8UI"
+      }
+    ],
+    "timezone": "Asia/Jerusalem",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc1574",
+          "frc2230",
+          "frc6738"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc6740",
+          "frc5291",
+          "frc3034"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": {
+          "in": "frc6737",
+          "out": "frc4757"
+        },
+        "name": "Alliance 3",
+        "picks": [
+          "frc5990",
+          "frc5038",
+          "frc4757"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc1937",
+          "frc1690",
+          "frc5928"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4338",
+          "frc1942",
+          "frc4586"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc3316",
+          "frc2630",
+          "frc4590"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc5747",
+          "frc5654",
+          "frc1657"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc1580",
+          "frc5951",
+          "frc3083"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-06",
+    "event_type": 1
+  },
+  {
+    "key": "2017isde2",
+    "website": "http://firstisrael.org.il",
+    "official": True,
+    "end_date": "2017-03-09",
+    "name": "ISR District Event #2",
+    "short_name": "ISR",
+    "facebook_eid": None,
+    "event_district_string": "Israel",
+    "venue_address": "Technion Sports Center\nTechnion\nHaifa, HA 00000\nIsrael",
+    "event_district": 10,
+    "week": 1,
+    "location": "Haifa, HA 00000, Israel",
+    "event_code": "isde2",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "Oq-kQ8_g-5A"
+      }
+    ],
+    "timezone": "Asia/Jerusalem",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc5291",
+          "frc5038",
+          "frc6736"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1577",
+          "frc3211",
+          "frc3075"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc3835",
+          "frc2096",
+          "frc5554"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc5635",
+          "frc6104",
+          "frc6737"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc5614",
+          "frc4320",
+          "frc4744"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc3339",
+          "frc5715",
+          "frc2212"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc1573",
+          "frc5135",
+          "frc5987"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc3388",
+          "frc1944",
+          "frc1942"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-08",
+    "event_type": 1
+  },
+  {
+    "key": "2017isde3",
+    "website": "http://firstisrael.org.il",
+    "official": True,
+    "end_date": "2017-03-15",
+    "name": "ISR District Event #3",
+    "short_name": "ISR",
+    "facebook_eid": None,
+    "event_district_string": "Israel",
+    "venue_address": "Shlomo Group Arena\n7 Isaac Remba St\nTel-Aviv, Yafo, TA 00000\nIsrael",
+    "event_district": 10,
+    "week": 1,
+    "location": "Tel-Aviv, Yafo, TA 00000, Israel",
+    "event_code": "isde3",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "ty-5sWlqg0M"
+      }
+    ],
+    "timezone": "Asia/Jerusalem",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-13",
+    "event_type": 1
+  },
+  {
+    "key": "2017isde4",
+    "website": "http://firstisrael.org.il",
+    "official": True,
+    "end_date": "2017-03-17",
+    "name": "ISR District Event #4",
+    "short_name": "ISR",
+    "facebook_eid": None,
+    "event_district_string": "Israel",
+    "venue_address": "Shlomo Group Arena\n7 Isaac Remba St\nTel-Aviv, Yafo, TA 00000\nIsrael",
+    "event_district": 10,
+    "week": 2,
+    "location": "Tel-Aviv, Yafo, TA 00000, Israel",
+    "event_code": "isde4",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "F-EIB6mQYlQ"
+      }
+    ],
+    "timezone": "Asia/Jerusalem",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-15",
+    "event_type": 1
+  },
+  {
+    "key": "2017lake",
+    "website": "http://www.frcbayouregional.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Bayou Regional",
+    "short_name": "Bayou",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Pontchartrain Center\nPontchartrain Center \n4545 Williams Blvd\nKenner, LA 70065\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Kenner, LA 70065, USA",
+    "event_code": "lake",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017mabos",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "NE District - Greater Boston Event",
+    "short_name": "Greater Boston",
+    "facebook_eid": None,
+    "event_district_string": "New England",
+    "venue_address": "Revere High School\n101 School Street\nRevere, MA 02151\nUSA",
+    "event_district": 3,
+    "week": 2,
+    "location": "Revere, MA 02151, USA",
+    "event_code": "mabos",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_red"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017mabri",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-12",
+    "name": "NE District - SE Mass Event",
+    "short_name": "SE Mass",
+    "facebook_eid": "887267038084916",
+    "event_district_string": "New England",
+    "venue_address": "Bridgewater-Raynham High School\n415 Center Street\nBridgewater, MA 02324\nUSA",
+    "event_district": 3,
+    "week": 1,
+    "location": "Bridgewater, MA 02324, USA",
+    "event_code": "mabri",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_red"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-10",
+    "event_type": 1
+  },
+  {
+    "key": "2017marea",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "NE District - North Shore Event",
+    "short_name": "North Shore",
+    "facebook_eid": None,
+    "event_district_string": "New England",
+    "venue_address": "Reading Memorial High School\n62 Oakland Road\nReading, MA 01867\nUSA",
+    "event_district": 3,
+    "week": 2,
+    "location": "Reading, MA 01867, USA",
+    "event_code": "marea",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_blue"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017mawor",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-10",
+    "name": "NE District - Worcester Polytechnic Institute Event",
+    "short_name": "Worcester Polytechnic Institute",
+    "facebook_eid": None,
+    "event_district_string": "New England",
+    "venue_address": "WPI Harrington Auditorium \n100 Institute Road\nWorcester, MA 01609\nUSA",
+    "event_district": 3,
+    "week": 1,
+    "location": "Worcester, MA 01609, USA",
+    "event_code": "mawor",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_blue"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-08",
+    "event_type": 1
+  },
+  {
+    "key": "2017mdbet",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-03-12",
+    "name": "CHS District - Greater DC Event sponsored by Accenture",
+    "short_name": "Greater DC",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "Walt Whitman High School\n7100 Whittier Blvd\nBethesda, MD 20817\nUSA",
+    "event_district": 6,
+    "week": 1,
+    "location": "Bethesda, MD 20817, USA",
+    "event_code": "mdbet",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7077060",
+        "channel": "17752602"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-10",
+    "event_type": 1
+  },
+  {
+    "key": "2017mdedg",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "CHS District - Central Maryland Event sponsored by Leidos",
+    "short_name": "Central Maryland",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "South River High School\n201 Central Avenue East\nEdgewater, MD 21037\nUSA",
+    "event_district": 6,
+    "week": 3,
+    "location": "Edgewater, MD 21037, USA",
+    "event_code": "mdedg",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7077107",
+        "channel": "17752602"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-24",
+    "event_type": 1
+  },
+  {
+    "key": "2017mdowi",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "CHS District - Northern Maryland Event",
+    "short_name": "Northern Maryland",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "McDonogh School\n8600 McDonogh Road\nOwings Mills, MD 21117\nUSA",
+    "event_district": 6,
+    "week": 2,
+    "location": "Owings Mills, MD 21117, USA",
+    "event_code": "mdowi",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7077093",
+        "channel": "17752602"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017melew",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "NE District - Pine Tree Event",
+    "short_name": "Pine Tree",
+    "facebook_eid": "1751365825122934",
+    "event_district_string": "New England",
+    "venue_address": "Androscoggin Bank Colisee\n190 Birch Street\nLewiston, ME 04240\nUSA",
+    "event_district": 3,
+    "week": 4,
+    "location": "Lewiston, ME 04240, USA",
+    "event_code": "melew",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_blue"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-30",
+    "event_type": 1
+  },
+  {
+    "key": "2017miann",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "FIM District - Ann Arbor Pioneer Event",
+    "short_name": "Ann Arbor Pioneer",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Pioneer High School\n601 West Stadium Boulevard\nAnn Arbor, MI 48103\nUSA",
+    "event_district": 1,
+    "week": 1,
+    "location": "Ann Arbor, MI 48103, USA",
+    "event_code": "miann",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-09",
+    "event_type": 1
+  },
+  {
+    "key": "2017mibro",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "FIM District - Woodhaven Event",
+    "short_name": "Woodhaven",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Woodhaven High School\n24787 Van Horn Road\nBrownstown, MI 48134\nUSA",
+    "event_district": 1,
+    "week": 3,
+    "location": "Brownstown, MI 48134, USA",
+    "event_code": "mibro",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017micen",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "FIM District - Center Line Event",
+    "short_name": "Center Line",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Center Line High School\n26300 Arsenal\nCenter Line, MI 48015\nUSA",
+    "event_district": 1,
+    "week": 1,
+    "location": "Center Line, MI 48015, USA",
+    "event_code": "micen",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-09",
+    "event_type": 1
+  },
+  {
+    "key": "2017micmp",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-15",
+    "name": "Michigan State Championship",
+    "short_name": "Michigan",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Saginaw Valley State University\nRyder Center\n7400 Bay Road\nUniversity Center, MI 48604\nUSA",
+    "event_district": 1,
+    "week": 6,
+    "location": "University Center, MI 48604, USA",
+    "event_code": "micmp",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-12",
+    "event_type": 2
+  },
+  {
+    "key": "2017miesc",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "FIM District - Escanaba Event",
+    "short_name": "Escanaba",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Escanaba High School\n500 S. Lincoln Road\nEscanaba, MI 49829\nUSA",
+    "event_district": 1,
+    "week": 2,
+    "location": "Escanaba, MI 49829, USA",
+    "event_code": "miesc",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-16",
+    "event_type": 1
+  },
+  {
+    "key": "2017migay",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "FIM District - Gaylord Event",
+    "short_name": "Gaylord",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Gaylord High School\n90 Livingston Blvd\nGaylord, MI 49735\nUSA",
+    "event_district": 1,
+    "week": 2,
+    "location": "Gaylord, MI 49735, USA",
+    "event_code": "migay",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-16",
+    "event_type": 1
+  },
+  {
+    "key": "2017migul",
+    "website": "http://www.firstinmichigan.org/",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "FIM District - Gull Lake Event",
+    "short_name": "Gull Lake",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Gull Lake High School\n7753 N. 34th Street\nRichland, MI 49083\nUSA",
+    "event_district": 1,
+    "week": 2,
+    "location": "Richland, MI 49083, USA",
+    "event_code": "migul",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-16",
+    "event_type": 1
+  },
+  {
+    "key": "2017mihow",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "FIM District - Howell Event",
+    "short_name": "Howell",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Parker Middle School\n400 Wright Road\nHowell, MI 48843\nUSA",
+    "event_district": 1,
+    "week": 4,
+    "location": "Howell, MI 48843, USA",
+    "event_code": "mihow",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-30",
+    "event_type": 1
+  },
+  {
+    "key": "2017mike0",
+    "website": "",
+    "official": False,
+    "end_date": "2017-02-25",
+    "name": "Kettering Week  0.5",
+    "short_name": "Kettering Week 0.5",
+    "facebook_eid": "",
+    "event_district_string": None,
+    "venue_address": None,
+    "event_district": 0,
+    "week": None,
+    "location": "Flint, Mi, USA",
+    "event_code": "mike0",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstinmichigan4"
+      }
+    ],
+    "timezone": None,
+    "alliances": [],
+    "event_type_string": "Preseason",
+    "start_date": "2017-02-25",
+    "event_type": 100
+  },
+  {
+    "key": "2017mike2",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "FIM District - Kettering University Event #2",
+    "short_name": "Kettering University",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Kettering University\nRecreation Center\nFlint, MI 48504\nUSA",
+    "event_district": 1,
+    "week": 1,
+    "location": "Flint, MI 48504, USA",
+    "event_code": "mike2",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-09",
+    "event_type": 1
+  },
+  {
+    "key": "2017miken",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "FIM District - East Kentwood Event",
+    "short_name": "East Kentwood",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "East Kentwood High School\n6230 Kalamazoo Avenue\nKentwood, MI 49508\nUSA",
+    "event_district": 1,
+    "week": 4,
+    "location": "Kentwood, MI 49508, USA",
+    "event_code": "miken",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-30",
+    "event_type": 1
+  },
+  {
+    "key": "2017miket",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "FIM District - Kettering University Event #1",
+    "short_name": "Kettering University",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Kettering University\nRecreation Center\nFlint, MI 48504\nUSA",
+    "event_district": 1,
+    "week": 0,
+    "location": "Flint, MI 48504, USA",
+    "event_code": "miket",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "dacast",
+        "file": "219328",
+        "channel": "66716"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc2619",
+          "frc5086",
+          "frc5215"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc5114",
+          "frc5150",
+          "frc5067"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc894",
+          "frc3535",
+          "frc322"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc245",
+          "frc6098",
+          "frc5697"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc6117",
+          "frc70",
+          "frc6548"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc6086",
+          "frc5260",
+          "frc5533"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc5460",
+          "frc1322",
+          "frc5524"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc5561",
+          "frc5660",
+          "frc4994"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-02",
+    "event_type": 1
+  },
+  {
+    "key": "2017milak",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "FIM District - Lakeview Event",
+    "short_name": "Lakeview",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Lakeview High School\n15060 Helmer Rd S\nBattle Creek, MI 49015\nUSA",
+    "event_district": 1,
+    "week": 0,
+    "location": "Battle Creek, MI 49015, USA",
+    "event_code": "milak",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "dacast",
+        "file": "219331",
+        "channel": "66716"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc3875",
+          "frc830",
+          "frc5685"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc4216",
+          "frc5205",
+          "frc6053"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc5501",
+          "frc5502",
+          "frc6589"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc4327",
+          "frc4003",
+          "frc5204"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc5559",
+          "frc4568",
+          "frc5227"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc3655",
+          "frc5980",
+          "frc4381"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc4453",
+          "frc5676",
+          "frc3603"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc5256",
+          "frc5248",
+          "frc6002"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-02",
+    "event_type": 1
+  },
+  {
+    "key": "2017milan",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "FIM District - Lansing Event",
+    "short_name": "Lansing",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Mason High School\n1001 S. Barns Street\nMason, MI 48854\nUSA",
+    "event_district": 1,
+    "week": 3,
+    "location": "Mason, MI 48854, USA",
+    "event_code": "milan",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017miliv",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "FIM District - Livonia Event",
+    "short_name": "Livonia",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Churchill High School\n8900 Newburgh Road\nLivonia, MI 48150\nUSA",
+    "event_district": 1,
+    "week": 5,
+    "location": "Livonia, MI 48150, USA",
+    "event_code": "miliv",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-04-06",
+    "event_type": 1
+  },
+  {
+    "key": "2017milsu",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "FIM District - Lake Superior State University Event",
+    "short_name": "Lake Superior State University",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Lake Superior State University\nNorris Center\n650 Meridian Street\nSault Ste. Marie, MI 49783\nUSA",
+    "event_district": 1,
+    "week": 4,
+    "location": "Sault Ste. Marie, MI 49783, USA",
+    "event_code": "milsu",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-30",
+    "event_type": 1
+  },
+  {
+    "key": "2017mimar",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "FIM District - Marysville Event",
+    "short_name": "Marysville",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Marysville High School\n555 E. Huron Blvd.\nMarysville, MI 48040\nUSA",
+    "event_district": 1,
+    "week": 5,
+    "location": "Marysville, MI 48040, USA",
+    "event_code": "mimar",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-04-06",
+    "event_type": 1
+  },
+  {
+    "key": "2017mimid",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "FIM District - Midland Event",
+    "short_name": "Midland",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "H.H. Dow High School\n3901 N. Saginaw Road\nMidland, MI 48640\nUSA",
+    "event_district": 1,
+    "week": 3,
+    "location": "Midland, MI 48640, USA",
+    "event_code": "mimid",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017mishe",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "FIM District - Shepherd Event",
+    "short_name": "Shepherd",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Shepherd High School\n100 E Hall Street\nShepherd, MI 48883\nUSA",
+    "event_district": 1,
+    "week": 5,
+    "location": "Shepherd, MI 48883, USA",
+    "event_code": "mishe",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-04-06",
+    "event_type": 1
+  },
+  {
+    "key": "2017misjo",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "FIM District - St. Joseph Event",
+    "short_name": "St. Joseph",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "St. Joseph High School\n2521 Stadium Drive\nSt. Joseph, MI 49085\nUSA",
+    "event_district": 1,
+    "week": 1,
+    "location": "St. Joseph, MI 49085, USA",
+    "event_code": "misjo",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-09",
+    "event_type": 1
+  },
+  {
+    "key": "2017misou",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "FIM District - Southfield Event",
+    "short_name": "Southfield",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Southfield High School\n24675 Lahser Road\nSouthfield, MI 48033\nUSA",
+    "event_district": 1,
+    "week": 0,
+    "location": "Southfield, MI 48033, USA",
+    "event_code": "misou",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "dacast",
+        "file": "219332",
+        "channel": "66716"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc33",
+          "frc2960",
+          "frc573"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1701",
+          "frc1025",
+          "frc5756"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc4810",
+          "frc815",
+          "frc5901"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc548",
+          "frc67",
+          "frc1188"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc3538",
+          "frc107",
+          "frc1250"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc1481",
+          "frc4680",
+          "frc5467"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc6136",
+          "frc6193",
+          "frc2137"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc6081",
+          "frc94",
+          "frc3707"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-02",
+    "event_type": 1
+  },
+  {
+    "key": "2017mitry",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "FIM District - Troy Event",
+    "short_name": "Troy",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Troy Athens High School\n4333 John R Road\nTroy, MI 48085\nUSA",
+    "event_district": 1,
+    "week": 4,
+    "location": "Troy, MI 48085, USA",
+    "event_code": "mitry",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-30",
+    "event_type": 1
+  },
+  {
+    "key": "2017mitvc",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "FIM District - Traverse City Event",
+    "short_name": "Traverse City",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Traverse City Central High School\n1150 Miliken Drive\nTraverse City, MI 49686\nUSA",
+    "event_district": 1,
+    "week": 5,
+    "location": "Traverse City, MI 49686, USA",
+    "event_code": "mitvc",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-04-06",
+    "event_type": 1
+  },
+  {
+    "key": "2017miwat",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "FIM District - Waterford Event",
+    "short_name": "Waterford",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Waterford Mott High School\n1151 Scott Lake Road\nWaterford, MI 48328\nUSA",
+    "event_district": 1,
+    "week": 2,
+    "location": "Waterford, MI 48328, USA",
+    "event_code": "miwat",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-16",
+    "event_type": 1
+  },
+  {
+    "key": "2017miwmi",
+    "website": "http://www.firstinmichigan.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "FIM District - West Michigan Event",
+    "short_name": "West Michigan",
+    "facebook_eid": None,
+    "event_district_string": "Michigan",
+    "venue_address": "Grand Valley State University\nField House\nAllendale, MI 49401\nUSA",
+    "event_district": 1,
+    "week": 3,
+    "location": "Allendale, MI 49401, USA",
+    "event_code": "miwmi",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017mndu",
+    "website": "http://www.mnfirst.org",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "Lake Superior Regional",
+    "short_name": "Lake Superior",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "DECC Arena/South Pioneer Hall\nDuluth Entertainment Convention Center\n350 Harbor Drive\nDuluth, MN 55802\nUSA",
+    "event_district": 0,
+    "week": 0,
+    "location": "Duluth, MN 55802, USA",
+    "event_code": "mndu",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstinspires1"
+      },
+      {
+        "type": "twitch",
+        "channel": "firstinspires2"
+      }
+    ],
+    "timezone": "America/Chicago",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc4539",
+          "frc2052",
+          "frc93"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": {
+          "in": "frc5253",
+          "out": "frc3755"
+        },
+        "name": "Alliance 2",
+        "picks": [
+          "frc3293",
+          "frc3755",
+          "frc5690"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc3277",
+          "frc2526",
+          "frc3740"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc4397",
+          "frc3840",
+          "frc4480"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4728",
+          "frc6318",
+          "frc5913"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc2503",
+          "frc3042",
+          "frc3102"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc2227",
+          "frc4845",
+          "frc2264"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc4181",
+          "frc3275",
+          "frc5299"
+        ]
+      }
+    ],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-01",
+    "event_type": 0
+  },
+  {
+    "key": "2017mndu2",
+    "website": "http://www.mnfirst.org",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "Northern Lights Regional",
+    "short_name": "Northern Lights",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "DECC Arena/Edmund Fitzgerald Exhibit Hall\nDuluth Entertainment Convention Center\n350 Harbor Drive\nDuluth, MN 55802\nUSA",
+    "event_district": 0,
+    "week": 0,
+    "location": "Duluth, MN 55802, USA",
+    "event_code": "mndu2",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "daredevils2512"
+      }
+    ],
+    "timezone": "America/Chicago",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc2987",
+          "frc525",
+          "frc6758"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc2509",
+          "frc3130",
+          "frc6613"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc4174",
+          "frc3883",
+          "frc1792"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc2512",
+          "frc876",
+          "frc27"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4859",
+          "frc2502",
+          "frc3754"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": {
+          "in": "frc3036",
+          "out": "frc3723"
+        },
+        "name": "Alliance 6",
+        "picks": [
+          "frc3723",
+          "frc3313",
+          "frc2202"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc877",
+          "frc4226",
+          "frc2491"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc2883",
+          "frc5172",
+          "frc2175"
+        ]
+      }
+    ],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-01",
+    "event_type": 0
+  },
+  {
+    "key": "2017mnmi",
+    "website": "http://www.mnfirst.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Minnesota 10000 Lakes Regional",
+    "short_name": "Minnesota 10000 Lakes",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Williams Arena/The Sports Pavilion Univ of MN\n1925 University Avenue SE\nMinneapolis, MN 55455\nUSA",
+    "event_district": 0,
+    "week": 5,
+    "location": "Minneapolis, MN 55455, USA",
+    "event_code": "mnmi",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-05",
+    "event_type": 0
+  },
+  {
+    "key": "2017mnmi2",
+    "website": "http://www.mnfirst.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Minnesota North Star Regional",
+    "short_name": "Minnesota North Star",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Mariucci Arena - University of Minnesota\n1901 4th Street SE\nMinneapolis, MN 55455\nUSA",
+    "event_district": 0,
+    "week": 5,
+    "location": "Minneapolis, MN 55455, USA",
+    "event_code": "mnmi2",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-05",
+    "event_type": 0
+  },
+  {
+    "key": "2017mnmn",
+    "website": "https://kingtec2169.com/minne-mini-regional/",
+    "official": False,
+    "end_date": "2017-11-18",
+    "name": "Minne Mini",
+    "short_name": "Minne Mini",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Prior Lake High School\n7575 150th St W\nSavage, MN, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Savage, MN, USA",
+    "event_code": "mnmn",
+    "year": 2017,
+    "webcast": [],
+    "timezone": None,
+    "alliances": [],
+    "event_type_string": "Offseason",
+    "start_date": "2017-11-17",
+    "event_type": 99
+  },
+  {
+    "key": "2017mnw0",
+    "website": "http://www.tnt3102.org/northern-mn-week-zero-nevis",
+    "official": None,
+    "end_date": "2017-02-18",
+    "name": "Northern MN Week Zero",
+    "short_name": "Northern MN Week Zero",
+    "facebook_eid": "",
+    "event_district_string": None,
+    "venue_address": None,
+    "event_district": 0,
+    "week": None,
+    "location": "Nevis, MN, USA",
+    "event_code": "mnw0",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "Vf1axW6xyBY"
+      }
+    ],
+    "timezone": None,
+    "alliances": [],
+    "event_type_string": "Preseason",
+    "start_date": "2017-02-18",
+    "event_type": 100
+  },
+  {
+    "key": "2017mokc",
+    "website": "http://www.kcfirst.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "Greater Kansas City Regional",
+    "short_name": "Greater Kansas City",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Metropolitan Community College/Bus. & Tech. Campus\n1775 Universal Avenue\nKansas City, MO 64120\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "Kansas City, MO 64120, USA",
+    "event_code": "mokc",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-15",
+    "event_type": 0
+  },
+  {
+    "key": "2017mosl",
+    "website": "http://www.stlfirst.org/",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "St. Louis Regional",
+    "short_name": "St. Louis",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Chaifetz Arena\n1 S. Compton Ave\nSt. Louis, MO 63103\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "St. Louis, MO 63103, USA",
+    "event_code": "mosl",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017mrcmp",
+    "website": "http://www.midatlanticrobotics.com/",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "FIRST Mid-Atlantic District Championship sponsored by Johnson & Johnson",
+    "short_name": "Mid-Atlantic",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Lehigh University - Stabler Arena\n124 Goodman Drive\nBethlehem, PA 18015\nUSA",
+    "event_district": 2,
+    "week": 5,
+    "location": "Bethlehem, PA 18015, USA",
+    "event_code": "mrcmp",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-05",
+    "event_type": 2
+  },
+  {
+    "key": "2017mxtl",
+    "website": None,
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "Toluca Regional",
+    "short_name": "Toluca",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "ITESM Campus Toluca\nEduardo Monroy Cardenas 2000\nSan Antonio Buenavista, C.P.\nToluca de Lerdo, MEX 50110\nMexico",
+    "event_district": 0,
+    "week": 0,
+    "location": "Toluca de Lerdo, MEX 50110, Mexico",
+    "event_code": "mxtl",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7013245",
+        "channel": "1718"
+      }
+    ],
+    "timezone": "America/Mexico_City",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc3472",
+          "frc3478",
+          "frc4010"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc4401",
+          "frc3933",
+          "frc6170"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc3158",
+          "frc5696",
+          "frc4723"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc6606",
+          "frc3794",
+          "frc3354"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc5716",
+          "frc4584",
+          "frc4735"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc4262",
+          "frc5948",
+          "frc4782"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": {
+          "in": "frc5133",
+          "out": "frc3510"
+        },
+        "name": "Alliance 7",
+        "picks": [
+          "frc6348",
+          "frc4371",
+          "frc3510"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc5887",
+          "frc2283",
+          "frc3527"
+        ]
+      }
+    ],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-01",
+    "event_type": 0
+  },
+  {
+    "key": "2017mxto",
+    "website": "http://www.firstlagunaregional.com.mx/",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "Laguna Regional",
+    "short_name": "Laguna",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "ITESM Campus Laguna - Santiago Garza de la Mora\nPaseo del Tecnologico #751\nTorreon, COA 27250\nMexico",
+    "event_district": 0,
+    "week": 4,
+    "location": "Torreon, COA 27250, Mexico",
+    "event_code": "mxto",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Mexico_City",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017ncash",
+    "website": "http://www.firstnorthcarolina.org/",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "NC District - UNC Asheville Event",
+    "short_name": "UNC Asheville",
+    "facebook_eid": None,
+    "event_district_string": "North Carolina",
+    "venue_address": "UNC Asheville - Kimmel Arena\n227 Campus Drive\nAsheville, NC 28804\nUSA",
+    "event_district": 7,
+    "week": 2,
+    "location": "Asheville, NC 28804, USA",
+    "event_code": "ncash",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "first_north_carolina"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017nccmp",
+    "website": "http://www.firstnorthcarolina.org/",
+    "official": True,
+    "end_date": "2017-04-02",
+    "name": "FIRST North Carolina State Championship",
+    "short_name": "North Carolina",
+    "facebook_eid": None,
+    "event_district_string": "North Carolina",
+    "venue_address": "Campbell University - Gore Arena\n56 Main Street\nLillington, NC 27546\nUSA",
+    "event_district": 7,
+    "week": 4,
+    "location": "Lillington, NC 27546, USA",
+    "event_code": "nccmp",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "first_north_carolina"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-03-31",
+    "event_type": 2
+  },
+  {
+    "key": "2017ncgre",
+    "website": "http://www.firstnorthcarolina.org/",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "NC District - Greensboro Event",
+    "short_name": "Greensboro",
+    "facebook_eid": None,
+    "event_district_string": "North Carolina",
+    "venue_address": "UNC Greensboro - Fleming Gym\n1408 Walker Avenue\nGreensboro, NC 27412\nUSA",
+    "event_district": 7,
+    "week": 1,
+    "location": "Greensboro, NC 27412, USA",
+    "event_code": "ncgre",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "first_north_carolina"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-09",
+    "event_type": 1
+  },
+  {
+    "key": "2017ncral",
+    "website": "http://www.firstnorthcarolina.org/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "NC District - Raleigh Event",
+    "short_name": "Raleigh",
+    "facebook_eid": None,
+    "event_district_string": "North Carolina",
+    "venue_address": "SE Raleigh Magnet High School\n2600 Rock Quarry Road\nRaleigh, NC 27610\nUSA",
+    "event_district": 7,
+    "week": 3,
+    "location": "Raleigh, NC 27610, USA",
+    "event_code": "ncral",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "first_north_carolina"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017ncwin",
+    "website": "http://www.firstnorthcarolina.org/",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "NC District - Pitt County Event",
+    "short_name": "Pitt County",
+    "facebook_eid": None,
+    "event_district_string": "North Carolina",
+    "venue_address": "South Central High School\n570 Forlines Road\nWinterville, NC 28590\nUSA",
+    "event_district": 7,
+    "week": 0,
+    "location": "Winterville, NC 28590, USA",
+    "event_code": "ncwin",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "first_north_carolina"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc3737",
+          "frc2642",
+          "frc4290"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc2059",
+          "frc4561",
+          "frc5607"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc435",
+          "frc6500",
+          "frc4816"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc3796",
+          "frc2640",
+          "frc4534"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4291",
+          "frc3459",
+          "frc5544"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc5160",
+          "frc5511",
+          "frc5190"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc6565",
+          "frc3506",
+          "frc3229"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc6003",
+          "frc2682",
+          "frc6502"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017necmp",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "New England District Championship",
+    "short_name": "New England",
+    "facebook_eid": None,
+    "event_district_string": "New England",
+    "venue_address": "UNH Whittemore Center\n128 Main Street\nDurham, NH 03824\nUSA",
+    "event_district": 3,
+    "week": 5,
+    "location": "Durham, NH 03824, USA",
+    "event_code": "necmp",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_red"
+      },
+      {
+        "type": "twitch",
+        "channel": "nefirst_blue"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-05",
+    "event_type": 2
+  },
+  {
+    "key": "2017new",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-22",
+    "name": "Newton Division",
+    "short_name": "Newton",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "George R. Brown Convention Center\nHouston, TX, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Houston, TX, USA",
+    "event_code": "new",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-19",
+    "event_type": 3
+  },
+  {
+    "key": "2017nhbed",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "NE District - Southern NH Event",
+    "short_name": "Southern NH",
+    "facebook_eid": "301138496926097",
+    "event_district_string": "New England",
+    "venue_address": "Bedford High School\n47 Nashua Road\nBedford, NH 03110\nUSA",
+    "event_district": 3,
+    "week": 3,
+    "location": "Bedford, NH 03110, USA",
+    "event_code": "nhbed",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_blue"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-24",
+    "event_type": 1
+  },
+  {
+    "key": "2017nhgrs",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "NE District - Granite State Event",
+    "short_name": "Granite State",
+    "facebook_eid": "1082322511863686",
+    "event_district_string": "New England",
+    "venue_address": "Windham High School\n64 London Bridge Road\nWindham, NH 03087\nUSA",
+    "event_district": 3,
+    "week": 0,
+    "location": "Windham, NH 03087, USA",
+    "event_code": "nhgrs",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_blue"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc5687",
+          "frc1058",
+          "frc4908"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc2084",
+          "frc95",
+          "frc3958"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc5735",
+          "frc1831",
+          "frc5459"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc6328",
+          "frc319",
+          "frc238"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc138",
+          "frc131",
+          "frc1073"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc467",
+          "frc78",
+          "frc6763"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc1517",
+          "frc1100",
+          "frc6324"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc6691",
+          "frc3566",
+          "frc885"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017njbri",
+    "website": "http://www.midatlanticrobotics.com/",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "MAR District - Bridgewater-Raritan Event",
+    "short_name": "Bridgewater-Raritan",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Bridgewater-Raritan High School\n600 Garretson Road\nBridgewater, NJ 08807\nUSA",
+    "event_district": 2,
+    "week": 2,
+    "location": "Bridgewater, NJ 08807, USA",
+    "event_code": "njbri",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017njfla",
+    "website": "http://www.midatlanticrobotics.com/",
+    "official": True,
+    "end_date": "2017-03-12",
+    "name": "MAR District - Mount Olive Event",
+    "short_name": "Mount Olive",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Mount Olive High School\n18 Corey Road\nFlanders, NJ 07836\nUSA",
+    "event_district": 2,
+    "week": 1,
+    "location": "Flanders, NJ 07836, USA",
+    "event_code": "njfla",
+    "year": 2017,
+    "webcast": [
+      {
+        "date": "2017-03-11",
+        "type": "youtube",
+        "channel": "g2vJBcx-VrQ"
+      },
+      {
+        "date": "2017-03-12",
+        "type": "youtube",
+        "channel": "hg0innXEl-c"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-10",
+    "event_type": 1
+  },
+  {
+    "key": "2017njski",
+    "website": "http://www.midatlanticrobotics.com/",
+    "official": True,
+    "end_date": "2017-04-02",
+    "name": "MAR District - Montgomery Event",
+    "short_name": "Montgomery",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Montgomery Township High School\n1016 Route 601\nSkillman, NJ 08558\nUSA",
+    "event_district": 2,
+    "week": 4,
+    "location": "Skillman, NJ 08558, USA",
+    "event_code": "njski",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-31",
+    "event_type": 1
+  },
+  {
+    "key": "2017njtab",
+    "website": "http://www.midatlanticrobotics.com/",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "MAR District - Seneca Event",
+    "short_name": "Seneca",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Seneca High School\n110 Carranza Road\nTabernacle, NJ 08088\nUSA",
+    "event_district": 2,
+    "week": 3,
+    "location": "Tabernacle, NJ 08088, USA",
+    "event_code": "njtab",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-24",
+    "event_type": 1
+  },
+  {
+    "key": "2017nvlv",
+    "website": "http://www.firstnevada.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Las Vegas Regional",
+    "short_name": "Las Vegas",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Cashman Center\n850 N. Las Vegas Blvd\nLas Vegas, NV 89101\nUSA",
+    "event_district": 0,
+    "week": 5,
+    "location": "Las Vegas, NV 89101, USA",
+    "event_code": "nvlv",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-05",
+    "event_type": 0
+  },
+  {
+    "key": "2017nyli",
+    "website": "http://www.sbpli-lifirst.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "SBPLI Long Island Regional",
+    "short_name": "SBPLI Long Island",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Hofstra University\nHofstra Arena\nHempstead, NY 11550\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "Hempstead, NY 11550, USA",
+    "event_code": "nyli",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017nyny",
+    "website": "http://www.nycfirst.org",
+    "official": True,
+    "end_date": "2017-04-09",
+    "name": "New York City Regional",
+    "short_name": "New York City",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "The Armory Track & Field Center\n216 Fort Washington Avenue\nNew York, NY 10032\nUSA",
+    "event_district": 0,
+    "week": 5,
+    "location": "New York, NY 10032, USA",
+    "event_code": "nyny",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nycfirst"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-06",
+    "event_type": 0
+  },
+  {
+    "key": "2017nyro",
+    "website": "http://upstatenyfirst.org/",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "Finger Lakes Regional ",
+    "short_name": "Finger Lakes",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Gordon Field House\nRochester Institute of Technology\n149 Lomb Memorial Drive\nRochester, NY 14623\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "Rochester, NY 14623, USA",
+    "event_code": "nyro",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-15",
+    "event_type": 0
+  },
+  {
+    "key": "2017nysu",
+    "website": "http://www.nycfirst.org",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "Hudson Valley Regional",
+    "short_name": "Hudson Valley",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Rockland Community College - Athletic Center\n145 College Road\nSuffern, NY 10901\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Suffern, NY 10901, USA",
+    "event_code": "nysu",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-23",
+    "event_type": 0
+  },
+  {
+    "key": "2017nytr",
+    "website": "http://www.techvalleyfirst.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "New York Tech Valley Regional",
+    "short_name": "New York Tech Valley",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Rensselaer Polytechnic Institute\nECAV Arena\nPeoples Drive\nTroy, NY 12180\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "Troy, NY 12180, USA",
+    "event_code": "nytr",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-15",
+    "event_type": 0
+  },
+  {
+    "key": "2017ohcl",
+    "website": "http://www.firstbuckeye.org/",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "Buckeye Regional",
+    "short_name": "Buckeye",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Cleveland State University - Wolstein Center\n2000 Prospect Street\nCleveland, OH 44115\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "Cleveland, OH 44115, USA",
+    "event_code": "ohcl",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-29",
+    "event_type": 0
+  },
+  {
+    "key": "2017ohsp",
+    "website": None,
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "Miami Valley Regional",
+    "short_name": "Miami Valley",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Wittenberg University\n200 W. Ward Street\nSpringfield, OH 45504\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "Springfield, OH 45504, USA",
+    "event_code": "ohsp",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "youtube",
+        "channel": "v6-NzkCX5EE"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017okok",
+    "website": "http://first-oklahoma.com/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Oklahoma Regional ",
+    "short_name": "Oklahoma",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Cox Arena - SMG Convention Center\nOne Myriad Gardens\nOklahoma City, OK 73102\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Oklahoma City, OK 73102, USA",
+    "event_code": "okok",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017onbar",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "ONT District - Georgian College Event",
+    "short_name": "Georgian College",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "Georgian College - Athletic Fitness Centre\n1 Georgian Drive\nBarrie, ON L4M 3X9\nCanada",
+    "event_district": 9,
+    "week": 3,
+    "location": "Barrie, ON L4M 3X9, Canada",
+    "event_code": "onbar",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-24",
+    "event_type": 1
+  },
+  {
+    "key": "2017oncmp",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-04-15",
+    "name": "FIRST Ontario Provincial Championship",
+    "short_name": "Ontario",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "Hershey Centre\n5500 Rose Cherry Place\nMississauga, ON L4Z 4B6\nCanada",
+    "event_district": 9,
+    "week": 6,
+    "location": "Mississauga, ON L4Z 4B6, Canada",
+    "event_code": "oncmp",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-12",
+    "event_type": 2
+  },
+  {
+    "key": "2017onham",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-04-09",
+    "name": "ONT District - McMaster University Event",
+    "short_name": "McMaster University",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "McMaster University\n1280 Main Street West\nHamilton, ON L8S 4L8\nCanada",
+    "event_district": 9,
+    "week": 5,
+    "location": "Hamilton, ON L8S 4L8, Canada",
+    "event_code": "onham",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-04-07",
+    "event_type": 1
+  },
+  {
+    "key": "2017onlon",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-04-02",
+    "name": "ONT District - Western University, Engineering Event",
+    "short_name": "Western University, Engineering",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "Western University\n1151 Richmond Street\nLondon, ON N6A 3K7\nCanada",
+    "event_district": 9,
+    "week": 4,
+    "location": "London, ON N6A 3K7, Canada",
+    "event_code": "onlon",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-31",
+    "event_type": 1
+  },
+  {
+    "key": "2017onnob",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "ONT District - North Bay Event",
+    "short_name": "North Bay",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "Nipissing University\nRobert J. Surtees Athletic Centre\n100 College Drive\nNorth Bay, ON P1B 8K9\nCanada",
+    "event_district": 9,
+    "week": 5,
+    "location": "North Bay, ON P1B 8K9, Canada",
+    "event_code": "onnob",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-04-06",
+    "event_type": 1
+  },
+  {
+    "key": "2017onosh",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "ONT District - Durham College Event",
+    "short_name": "Durham College",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "Durham College\nCampus Wellness & Recreation Center\n2000 Simcoe Street North\nOshawa, ON L1H 7K4\nCanada",
+    "event_district": 9,
+    "week": 0,
+    "location": "Oshawa, ON L1H 7K4, Canada",
+    "event_code": "onosh",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7083813",
+        "channel": "12312913"
+      }
+    ],
+    "timezone": "America/Toronto",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc4525",
+          "frc2609",
+          "frc4914"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1285",
+          "frc4939",
+          "frc4946"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc5036",
+          "frc3683",
+          "frc4476"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc2200",
+          "frc772",
+          "frc6323"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4951",
+          "frc1360",
+          "frc1305"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc6513",
+          "frc2994",
+          "frc5428"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc6110",
+          "frc1075",
+          "frc2013"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc4688",
+          "frc781",
+          "frc2386"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017onto1",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-03-12",
+    "name": "ONT District - Ryerson University Event",
+    "short_name": "Ryerson University",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "Ryerson University\nMattamy Athletic Centre\n50 Carlton Street\nToronto, ON M5B 1J2\nCanada",
+    "event_district": 9,
+    "week": 1,
+    "location": "Toronto, ON M5B 1J2, Canada",
+    "event_code": "onto1",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-10",
+    "event_type": 1
+  },
+  {
+    "key": "2017onto2",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "ONT District - Victoria Park Collegiate Event",
+    "short_name": "Victoria Park Collegiate",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "Victoria Park Collegiate\n15 Wallingford Road\nToronto, ON M3A 2V1\nCanada",
+    "event_district": 9,
+    "week": 2,
+    "location": "Toronto, ON M3A 2V1, Canada",
+    "event_code": "onto2",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017onwat",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "ONT District - University of Waterloo Event",
+    "short_name": "University of Waterloo",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "University of Waterloo\nPhysical Activities Complex\n200 University Avenue West\nWaterloo, ON N2L 3G1\nCanada",
+    "event_district": 9,
+    "week": 3,
+    "location": "Waterloo, ON N2L 3G1, Canada",
+    "event_code": "onwat",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017onwin",
+    "website": "http://www.firstroboticscanada.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "ONT District - Windsor Essex Great Lakes Event",
+    "short_name": "Windsor Essex Great Lakes",
+    "facebook_eid": None,
+    "event_district_string": "Ontario",
+    "venue_address": "University of Windsor\nSt. Denis Centre\n2555 College Avenue\nWindsor, ON N9B 3P4\nCanada",
+    "event_district": 9,
+    "week": 4,
+    "location": "Windsor, ON N9B 3P4, Canada",
+    "event_code": "onwin",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-30",
+    "event_type": 1
+  },
+  {
+    "key": "2017orlak",
+    "website": "http://www.firstwa.org",
+    "official": True,
+    "end_date": "2017-04-01",
+    "name": "PNW District - Lake Oswego Event",
+    "short_name": "Lake Oswego",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Lake Oswego High School\n2501 Country Club Rd\nLake Oswego, OR 97034\nUSA",
+    "event_district": 4,
+    "week": 4,
+    "location": "Lake Oswego, OR 97034, USA",
+    "event_code": "orlak",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_red"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-30",
+    "event_type": 1
+  },
+  {
+    "key": "2017orore",
+    "website": "http://www.firstwa.org/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "PNW District - Clackamas Academy of Industrial Science Event",
+    "short_name": "Clackamas Academy of Industrial Science",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Clackamas Academy\n1306 12th Street\nOregon City, OR 97045\nUSA",
+    "event_district": 4,
+    "week": 3,
+    "location": "Oregon City, OR 97045, USA",
+    "event_code": "orore",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_red"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-23",
+    "event_type": 1
+  },
+  {
+    "key": "2017orwil",
+    "website": "http://oregonfirst.org/",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "PNW District - Wilsonville Event",
+    "short_name": "Wilsonville",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Wilsonville High School\n6800 SW Wilsonville Road\nWilsonville, OR 97070\nUSA",
+    "event_district": 4,
+    "week": 1,
+    "location": "Wilsonville, OR 97070, USA",
+    "event_code": "orwil",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_red"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-09",
+    "event_type": 1
+  },
+  {
+    "key": "2017paca",
+    "website": "http://www.pittsburghfirst.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "Greater Pittsburgh Regional",
+    "short_name": "Greater Pittsburgh",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Convocation Center at\nCalifornia University of Pennsylvania \nRiverview Drive\nCalifornia, PA 15419\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "California, PA 15419, USA",
+    "event_code": "paca",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-15",
+    "event_type": 0
+  },
+  {
+    "key": "2017pahat",
+    "website": "http://www.midatlanticrobotics.com/",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "MAR District - Hatboro-Horsham Event",
+    "short_name": "Hatboro-Horsham",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Hatboro-Horsham High School\n899 Horsham Road\nHorsham, PA 19044\nUSA",
+    "event_district": 2,
+    "week": 0,
+    "location": "Horsham, PA 19044, USA",
+    "event_code": "pahat",
+    "year": 2017,
+    "webcast": [
+      {
+        "date": "2017-03-04",
+        "type": "youtube",
+        "channel": "6WCtHpaAWdM"
+      },
+      {
+        "date": "2017-03-05",
+        "type": "youtube",
+        "channel": "Z40sSl8qNBo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc708",
+          "frc1257",
+          "frc4373"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc341",
+          "frc5895",
+          "frc4454"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc3974",
+          "frc2590",
+          "frc2539"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc2607",
+          "frc103",
+          "frc4285"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc709",
+          "frc5684",
+          "frc1647"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc2458",
+          "frc5401",
+          "frc5404"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc2180",
+          "frc1218",
+          "frc1143"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc5181",
+          "frc1807",
+          "frc3929"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017paphi",
+    "website": "http://www.midatlanticrobotics.com/",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "MAR District - Springside Chestnut Hill Academy Event",
+    "short_name": "Springside Chestnut Hill Academy",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Springside Chestnut Hill Academy\n500 West Willow Grove Avenue\nPhiladelphia, PA 19118\nUSA",
+    "event_district": 2,
+    "week": 2,
+    "location": "Philadelphia, PA 19118, USA",
+    "event_code": "paphi",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017pawch",
+    "website": "http://www.midatlanticrobotics.com",
+    "official": True,
+    "end_date": "2017-03-12",
+    "name": "MAR District - Westtown Event",
+    "short_name": "Westtown",
+    "facebook_eid": None,
+    "event_district_string": "Mid-Atlantic",
+    "venue_address": "Westtown School\n975 Westtown Road\nWest Chester, PA 19382\nUSA",
+    "event_district": 2,
+    "week": 1,
+    "location": "West Chester, PA 19382, USA",
+    "event_code": "pawch",
+    "year": 2017,
+    "webcast": [
+      {
+        "date": "2017-03-12",
+        "type": "youtube",
+        "channel": "K4g3FOW4v5k"
+      },
+      {
+        "date": "2017-03-11",
+        "type": "youtube",
+        "channel": "kHyr3D53RIQ"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-10",
+    "event_type": 1
+  },
+  {
+    "key": "2017pncmp",
+    "website": "http://www.firstwa.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Pacific Northwest District Championship",
+    "short_name": "Pacific Northwest",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Eastern Washington University - Reese Court\n526 5th Street\nCheney, WA 99004\nUSA",
+    "event_district": 4,
+    "week": 5,
+    "location": "Cheney, WA 99004, USA",
+    "event_code": "pncmp",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_red"
+      },
+      {
+        "type": "twitch",
+        "channel": "firstwa_blue"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District Championship",
+    "start_date": "2017-04-05",
+    "event_type": 2
+  },
+  {
+    "key": "2017qcmo",
+    "website": "http://www.robotiquefirstquebec.org/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Festival de Robotique - Montreal Regional",
+    "short_name": "Festival de Robotique - Montreal",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Centre Claude-Robillard\n1000 Avenue Emile-Journault\nMontreal, QC H2M 2E7\nCanada",
+    "event_district": 0,
+    "week": 3,
+    "location": "Montreal, QC H2M 2E7, Canada",
+    "event_code": "qcmo",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Toronto",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017ripro",
+    "website": "http://www.nefirst.org/",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "NE District - Rhode Island Event",
+    "short_name": "Rhode Island",
+    "facebook_eid": "1084807304935119",
+    "event_district_string": "New England",
+    "venue_address": "Bryant University\n1150 Douglas Pike\nSmithfield, RI 02917\nUSA",
+    "event_district": 3,
+    "week": 3,
+    "location": "Smithfield, RI 02917, USA",
+    "event_code": "ripro",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "nefirst_red"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-24",
+    "event_type": 1
+  },
+  {
+    "key": "2017roe",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-22",
+    "name": "Roebling Division",
+    "short_name": "Roebling",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "George R. Brown Convention Center\nHouston, TX, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Houston, TX, USA",
+    "event_code": "roe",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-19",
+    "event_type": 3
+  },
+  {
+    "key": "2017scmb",
+    "website": "http://www.myrtlebeachfirstrobotics.com",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "Palmetto Regional",
+    "short_name": "Palmetto",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Myrtle Beach Convention Center\n2101 Oak Street\nMyrtle Beach, SC 29578\nUSA",
+    "event_district": 0,
+    "week": 0,
+    "location": "Myrtle Beach, SC 29578, USA",
+    "event_code": "scmb",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc1876",
+          "frc3489",
+          "frc329"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc3824",
+          "frc359",
+          "frc1319"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc2614",
+          "frc2393",
+          "frc4265"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc1553",
+          "frc1287",
+          "frc283"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc6222",
+          "frc3976",
+          "frc4965"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc3140",
+          "frc4451",
+          "frc281"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc1758",
+          "frc1369",
+          "frc4020"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc5777",
+          "frc343",
+          "frc1539"
+        ]
+      }
+    ],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-01",
+    "event_type": 0
+  },
+  {
+    "key": "2017tes",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-29",
+    "name": "Tesla Division",
+    "short_name": "Tesla",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "America's Center/Dome\nSt. Louis, MO, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "St. Louis, MO, USA",
+    "event_code": "tes",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-26",
+    "event_type": 3
+  },
+  {
+    "key": "2017tnkn",
+    "website": "http://tnfirst.org/events/",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Smoky Mountains Regional",
+    "short_name": "Smoky Mountains",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Thompson-Boling Arena - University of Tennessee\n1600 Phillip Fulmer Way #202\nKnoxville, TN 37996\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Knoxville, TN 37996, USA",
+    "event_code": "tnkn",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  },
+  {
+    "key": "2017tur",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-22",
+    "name": "Turing Division",
+    "short_name": "Turing",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "George R. Brown Convention Center\nHouston, TX, USA",
+    "event_district": 0,
+    "week": None,
+    "location": "Houston, TX, USA",
+    "event_code": "tur",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Championship Division",
+    "start_date": "2017-04-19",
+    "event_type": 3
+  },
+  {
+    "key": "2017txda",
+    "website": "http://www.DallasFRC.org/",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "Dallas Regional",
+    "short_name": "Dallas",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Irving Convention Center\n500 West Las Colinas Boulevard  \nIrving, TX 75039\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "Irving, TX 75039, USA",
+    "event_code": "txda",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017txho",
+    "website": "http://houston.txfirst.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "Lone Star Central Regional",
+    "short_name": "Lone Star Central",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Strake Jesuit College Preparatory\n8900 Bellaire Blvd\nHouston, TX 77036\nUSA",
+    "event_district": 0,
+    "week": 2,
+    "location": "Houston, TX 77036, USA",
+    "event_code": "txho",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-15",
+    "event_type": 0
+  },
+  {
+    "key": "2017txlu",
+    "website": "http://hubcityregional.com",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "Hub City Regional",
+    "short_name": "Hub City",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Panhandle South Plains Fair\n105 E. Broadway\nLubbock, TX 79403\nUSA",
+    "event_district": 0,
+    "week": 0,
+    "location": "Lubbock, TX 79403, USA",
+    "event_code": "txlu",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "ustream",
+        "channel": "2724313"
+      }
+    ],
+    "timezone": "America/Chicago",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc3366",
+          "frc2468",
+          "frc5866"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1477",
+          "frc3847",
+          "frc159"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc118",
+          "frc624",
+          "frc5550"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc2481",
+          "frc2341",
+          "frc2395"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc5572",
+          "frc2164",
+          "frc4603"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc418",
+          "frc192",
+          "frc4499"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc5411",
+          "frc2352",
+          "frc4696"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc1817",
+          "frc935",
+          "frc4063"
+        ]
+      }
+    ],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-01",
+    "event_type": 0
+  },
+  {
+    "key": "2017txsa",
+    "website": "http://www.alamo-first.org",
+    "official": True,
+    "end_date": "2017-04-08",
+    "name": "Alamo Regional",
+    "short_name": "Alamo",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Henry B. Gonzalez Convention Center\n200 East Market Street\nSan Antonio, TX 78205\nUSA",
+    "event_district": 0,
+    "week": 5,
+    "location": "San Antonio, TX 78205, USA",
+    "event_code": "txsa",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-05",
+    "event_type": 0
+  },
+  {
+    "key": "2017txwa",
+    "website": "http://firstintexas.org/regions/alamo-region/brazos-valley-frc-regional/",
+    "official": True,
+    "end_date": "2017-04-02",
+    "name": "Brazos Valley Regional",
+    "short_name": "Brazos Valley",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "University High School\n3201 S. New Road\nWaco, TX 76706\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "Waco, TX 76706, USA",
+    "event_code": "txwa",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-30",
+    "event_type": 0
+  },
+  {
+    "key": "2017txwo",
+    "website": "http://houston.txfirst.org",
+    "official": True,
+    "end_date": "2017-04-02",
+    "name": "Lone Star North Regional",
+    "short_name": "Lone Star North",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "College Park High School\n3701 College Park Drive\nThe Woodlands, TX 77384\nUSA",
+    "event_district": 0,
+    "week": 4,
+    "location": "The Woodlands, TX 77384, USA",
+    "event_code": "txwo",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-30",
+    "event_type": 0
+  },
+  {
+    "key": "2017utwv",
+    "website": "http://www.utfrc.utah.edu",
+    "official": True,
+    "end_date": "2017-03-11",
+    "name": "Utah Regional",
+    "short_name": "Utah",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Maverik Center\n3200 South Decker Lake Drive\nWest Valley City, UT 84119\nUSA",
+    "event_district": 0,
+    "week": 1,
+    "location": "West Valley City, UT 84119, USA",
+    "event_code": "utwv",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Denver",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-08",
+    "event_type": 0
+  },
+  {
+    "key": "2017vabla",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "CHS District - Southwest Virginia Event",
+    "short_name": "Southwest Virginia",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "Blacksburg High School\n3401 Bruin Lane\nBlacksburg, VA 24060\nUSA",
+    "event_district": 6,
+    "week": 0,
+    "location": "Blacksburg, VA 24060, USA",
+    "event_code": "vabla",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7077043",
+        "channel": "17752602"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc540",
+          "frc587",
+          "frc3494"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc5950",
+          "frc1262",
+          "frc3939"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc401",
+          "frc1629",
+          "frc3072"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc836",
+          "frc1598",
+          "frc6326"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4505",
+          "frc5279",
+          "frc2890"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc5854",
+          "frc2106",
+          "frc619"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc3258",
+          "frc3359",
+          "frc1086"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc2534",
+          "frc1676",
+          "frc1599"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017vagle",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "CHS District - Central Virginia Event",
+    "short_name": "Central Virginia",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "Deep Run High School\n4801 Twin Hickory Road\nGlen Allen, VA 23059\nUSA",
+    "event_district": 6,
+    "week": 3,
+    "location": "Glen Allen, VA 23059, USA",
+    "event_code": "vagle",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7077130",
+        "channel": "17752602"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-24",
+    "event_type": 1
+  },
+  {
+    "key": "2017vahay",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "CHS District - Northern Virginia Event sponsored by Bechtel",
+    "short_name": "Northern Virginia",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "Battlefield High School\n15000 Graduation Drive\nHaymarket, VA 20169\nUSA",
+    "event_district": 6,
+    "week": 0,
+    "location": "Haymarket, VA 20169, USA",
+    "event_code": "vahay",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7077017",
+        "channel": "17752602"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc5587",
+          "frc1418",
+          "frc2186"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1895",
+          "frc346",
+          "frc612"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc1731",
+          "frc384",
+          "frc4472"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc623",
+          "frc2363",
+          "frc2421"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc6334",
+          "frc1080",
+          "frc1123"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc2377",
+          "frc1610",
+          "frc1137"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc3274",
+          "frc116",
+          "frc4242"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc4456",
+          "frc620",
+          "frc3373"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017vapor",
+    "website": "http://www.firstchesapeake.org",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "CHS District - Hampton Roads Event sponsored by Newport News Shipbuilding",
+    "short_name": "Hampton Roads",
+    "facebook_eid": None,
+    "event_district_string": "Chesapeake",
+    "venue_address": "Churchland High School\n4301 Cedar Lane\nPortsmouth, VA 23703\nUSA",
+    "event_district": 6,
+    "week": 2,
+    "location": "Portsmouth, VA 23703, USA",
+    "event_code": "vapor",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "livestream",
+        "file": "7077078",
+        "channel": "17752602"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017waahs",
+    "website": "http://www.firstwa.org",
+    "official": True,
+    "end_date": "2017-04-02",
+    "name": "PNW District - Auburn Event",
+    "short_name": "Auburn",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Auburn High School\n711 E. Main St.\nAuburn, WA 98002\nUSA",
+    "event_district": 4,
+    "week": 4,
+    "location": "Auburn, WA 98002, USA",
+    "event_code": "waahs",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_blue"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-31",
+    "event_type": 1
+  },
+  {
+    "key": "2017waamv",
+    "website": "http://www.firstwa.org/",
+    "official": True,
+    "end_date": "2017-03-05",
+    "name": "PNW District - Auburn Mountainview Event",
+    "short_name": "Auburn Mountainview",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Auburn Mountainview High School\n28900 124th Avenue SE\nAuburn, WA 98092\nUSA",
+    "event_district": 4,
+    "week": 0,
+    "location": "Auburn, WA 98092, USA",
+    "event_code": "waamv",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "ustream",
+        "channel": "17281416"
+      },
+      {
+        "type": "twitch",
+        "channel": "firstwa_blue"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc4915",
+          "frc5803",
+          "frc3223"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc2930",
+          "frc2046",
+          "frc3786"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc6350",
+          "frc5827",
+          "frc4131"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc1294",
+          "frc4450",
+          "frc5495"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc2907",
+          "frc360",
+          "frc1983"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc4089",
+          "frc2557",
+          "frc1899"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc4469",
+          "frc5588",
+          "frc4681"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc3588",
+          "frc1258",
+          "frc1318"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-03",
+    "event_type": 1
+  },
+  {
+    "key": "2017waell",
+    "website": "http://www.firstwa.org",
+    "official": True,
+    "end_date": "2017-03-18",
+    "name": "PNW District - Central Washington University Event",
+    "short_name": "Central Washington University",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Central Washington University - Nicholson Pavilion\n715 E. Dean Nicholson Blvd\nEllensburg, WA 98926\nUSA",
+    "event_district": 4,
+    "week": 2,
+    "location": "Ellensburg, WA 98926, USA",
+    "event_code": "waell",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_red"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-16",
+    "event_type": 1
+  },
+  {
+    "key": "2017wamou",
+    "website": "http://www.firstwa.org/",
+    "official": True,
+    "end_date": "2017-03-19",
+    "name": "PNW District - Mount Vernon Event",
+    "short_name": "Mount Vernon",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Mount Vernon High School\n314 North 9th Street\nMount Vernon, WA 98273\nUSA",
+    "event_district": 4,
+    "week": 2,
+    "location": "Mount Vernon, WA 98273, USA",
+    "event_code": "wamou",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_blue"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-17",
+    "event_type": 1
+  },
+  {
+    "key": "2017wasno",
+    "website": "http://www.firstwa.org/",
+    "official": True,
+    "end_date": "2017-03-26",
+    "name": "PNW District - Glacier Peak Event",
+    "short_name": "Glacier Peak",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "Glacier Peak High School\n7401 144th Place SE\nSnohomish, WA 98296\nUSA",
+    "event_district": 4,
+    "week": 3,
+    "location": "Snohomish, WA 98296, USA",
+    "event_code": "wasno",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_blue"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [],
+    "event_type_string": "District",
+    "start_date": "2017-03-24",
+    "event_type": 1
+  },
+  {
+    "key": "2017waspo",
+    "website": "http://www.firstwa.org",
+    "official": True,
+    "end_date": "2017-03-04",
+    "name": "PNW District - West Valley Event",
+    "short_name": "West Valley",
+    "facebook_eid": None,
+    "event_district_string": "Pacific Northwest",
+    "venue_address": "West Valley High School\n8301 E. Buckeye Avenue\nSpokane, WA 99212\nUSA",
+    "event_district": 4,
+    "week": 0,
+    "location": "Spokane, WA 99212, USA",
+    "event_code": "waspo",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstwa_red"
+      }
+    ],
+    "timezone": "America/Los_Angeles",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc4513",
+          "frc3238",
+          "frc4104"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1595",
+          "frc5920",
+          "frc6076"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc4309",
+          "frc5468",
+          "frc2923"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc6129",
+          "frc2147",
+          "frc3789"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc4495",
+          "frc4061",
+          "frc3693"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc2148",
+          "frc4980",
+          "frc2149"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc5942",
+          "frc4125",
+          "frc3220"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc3575",
+          "frc4608",
+          "frc4911"
+        ]
+      }
+    ],
+    "event_type_string": "District",
+    "start_date": "2017-03-02",
+    "event_type": 1
+  },
+  {
+    "key": "2017week0",
+    "website": "http://www.firstinspires.org",
+    "official": True,
+    "end_date": "2017-02-18",
+    "name": "Week 0",
+    "short_name": "Week 0",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "Bishop Guertin High School\nNashua NH\nUSA",
+    "event_district": 0,
+    "week": None,
+    "location": "Nashua, NH, USA",
+    "event_code": "week0",
+    "year": 2017,
+    "webcast": [
+      {
+        "type": "twitch",
+        "channel": "firstinspires"
+      },
+      {
+        "type": "twitch",
+        "channel": "firstinspires1"
+      }
+    ],
+    "timezone": "America/New_York",
+    "alliances": [
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 1",
+        "picks": [
+          "frc1153",
+          "frc78",
+          "frc6324"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 2",
+        "picks": [
+          "frc1519",
+          "frc5687",
+          "frc157"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 3",
+        "picks": [
+          "frc4761",
+          "frc2084",
+          "frc2079"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 4",
+        "picks": [
+          "frc2342",
+          "frc509",
+          "frc1729"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 5",
+        "picks": [
+          "frc1721",
+          "frc1517",
+          "frc4905"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 6",
+        "picks": [
+          "frc811",
+          "frc319",
+          "frc1831"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 7",
+        "picks": [
+          "frc1058",
+          "frc125",
+          "frc238"
+        ]
+      },
+      {
+        "declines": [],
+        "backup": None,
+        "name": "Alliance 8",
+        "picks": [
+          "frc58",
+          "frc501",
+          "frc88"
+        ]
+      }
+    ],
+    "event_type_string": "Preseason",
+    "start_date": "2017-02-18",
+    "event_type": 100
+  },
+  {
+    "key": "2017wila",
+    "website": None,
+    "official": True,
+    "end_date": "2017-04-15",
+    "name": "Seven Rivers Regional",
+    "short_name": "Seven Rivers",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "La Crosse Center\n300 Harborview Plaza\nLa Crosse, WI 54601\nUSA",
+    "event_district": 0,
+    "week": 6,
+    "location": "La Crosse, WI 54601, USA",
+    "event_code": "wila",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-04-12",
+    "event_type": 0
+  },
+  {
+    "key": "2017wimi",
+    "website": "http://www.wisconsinregional.com",
+    "official": True,
+    "end_date": "2017-03-25",
+    "name": "Wisconsin Regional",
+    "short_name": "Wisconsin",
+    "facebook_eid": None,
+    "event_district_string": None,
+    "venue_address": "UW - Milwaukee Panther Arena\n400 West Kilbourn Avenue\nMilwaukee, WI 53201\nUSA",
+    "event_district": 0,
+    "week": 3,
+    "location": "Milwaukee, WI 53201, USA",
+    "event_code": "wimi",
+    "year": 2017,
+    "webcast": [],
+    "timezone": "America/Chicago",
+    "alliances": [],
+    "event_type_string": "Regional",
+    "start_date": "2017-03-22",
+    "event_type": 0
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 matches = [{'alliances': {'blue': {'score': 45,
@@ -7584,48 +13589,59 @@ rec = np.zeros(2*numMatches, dtype=[('match','i4'),
                                     ('fouls', 'i4')])    
 
 
-alliances = {'red', 'blue'}
-row = 0
+for event in event_list:
+    
+    event_start_date = strftime(event['start_date'])    # convert date string to date structure
+    
+    if (event['official'] == True) and (event_start_date <= date.today()):
 
-for m in range(0, numMatches):
+        print('%s', event['key'])
 
-    match = matches[m]
-
-    for alliance in alliances:
-
-        # move 40 points for rotors in auto to a rotor point total
-        # auto rotor points will be 20 point bonus only  
-        numAutoRotors = match['score_breakdown'][alliance]['autoRotorPoints']/60;
-        match['score_breakdown'][alliance]['autoRotorPoints']   -= numAutoRotors * 40; 
-        match['score_breakdown'][alliance]['teleopRotorPoints'] += numAutoRotors * 40;
-
-
-        team1 = int(match['alliances'][alliance]['teams'][0].replace("frc", ""))
-        team2 = int(match['alliances'][alliance]['teams'][1].replace("frc", ""))
-        team3 = int(match['alliances'][alliance]['teams'][2].replace("frc", ""))
-
-        rec[row] = (  match['match_number'],
-                      match['comp_level'],
-                      alliance,
-                      team1,
-                      team2,
-                      team3,
-                      match['alliances'][alliance]['score'],
-                      match['score_breakdown'][alliance]['autoMobilityPoints'],
-                      match['score_breakdown'][alliance]['autoFuelPoints'],
-                      match['score_breakdown'][alliance]['teleopFuelPoints'],
-                      match['score_breakdown'][alliance]['kPaBonusPoints'],
-                      match['score_breakdown'][alliance]['autoRotorPoints'],
-                      match['score_breakdown'][alliance]['teleopRotorPoints'],
-                      match['score_breakdown'][alliance]['rotorBonusPoints'],
-                      match['score_breakdown'][alliance]['teleopTakeoffPoints'],
-                      match['score_breakdown'][alliance]['foulPoints'])
-
-        row += 1
-
-
-names = rec.dtype.names
-header = ','.join(names) + '\n'
-with open('2017vahay.csv', 'wb') as csvFile:
-    csvFile.write(header.encode())
-    np.savetxt(csvFile, rec, '%s', delimiter=",")
+        #event = tba.event_get('2017vahay')
+        #matches = event.matches
+    
+        alliances = {'red', 'blue'}
+        row = 0
+        
+        for m in range(0, numMatches):
+        
+            match = matches[m]
+        
+            for alliance in alliances:
+        
+                # move 40 points for rotors in auto to a rotor point total
+                # auto rotor points will be 20 point bonus only  
+                numAutoRotors = match['score_breakdown'][alliance]['autoRotorPoints']/60;
+                match['score_breakdown'][alliance]['autoRotorPoints']   -= numAutoRotors * 40; 
+                match['score_breakdown'][alliance]['teleopRotorPoints'] += numAutoRotors * 40;
+        
+        
+                team1 = int(match['alliances'][alliance]['teams'][0].replace("frc", ""))
+                team2 = int(match['alliances'][alliance]['teams'][1].replace("frc", ""))
+                team3 = int(match['alliances'][alliance]['teams'][2].replace("frc", ""))
+        
+                rec[row] = (  match['match_number'],
+                              match['comp_level'],
+                              alliance,
+                              team1,
+                              team2,
+                              team3,
+                              match['alliances'][alliance]['score'],
+                              match['score_breakdown'][alliance]['autoMobilityPoints'],
+                              match['score_breakdown'][alliance]['autoFuelPoints'],
+                              match['score_breakdown'][alliance]['teleopFuelPoints'],
+                              match['score_breakdown'][alliance]['kPaBonusPoints'],
+                              match['score_breakdown'][alliance]['autoRotorPoints'],
+                              match['score_breakdown'][alliance]['teleopRotorPoints'],
+                              match['score_breakdown'][alliance]['rotorBonusPoints'],
+                              match['score_breakdown'][alliance]['teleopTakeoffPoints'],
+                              match['score_breakdown'][alliance]['foulPoints'])
+        
+                row += 1
+        
+        
+        names = rec.dtype.names
+        header = ','.join(names) + '\n'
+        with open(event['key'] + '.csv', 'wb') as csvFile:
+            csvFile.write(header.encode())
+            np.savetxt(csvFile, rec, '%s', delimiter=",")
