@@ -12,7 +12,7 @@ end
 
 team_cols   = [find(strcmp(header,'team1')) : find(strcmp(header,'team3'))];
 score_col   = [find(strcmp(header,'score'))];
-auto_cols   = [find(strcmp(header,'autoMobility')) find(strcmp(header,'autoFuel')) find(strcmp(header,'autoRotors'))];
+auto_cols   = [find(strcmp(header,'autoMobility')) find(strcmp(header,'autoRotor'))];
 fuel_cols   = [find(strcmp(header,'autoFuel')) find(strcmp(header,'teleFuel')) find(strcmp(header,'fuelBonus'))];
 gear_cols   = [find(strcmp(header,'totalRotor')) find(strcmp(header,'rotorBonus'))];
 climb_col   = [find(strcmp(header,'climb'))];
