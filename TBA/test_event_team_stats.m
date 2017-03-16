@@ -1,0 +1,1 @@
+[team_num, stat_cols, OPR, DPR] = get_event_team_stats('data/week1/2017txda.csv')
