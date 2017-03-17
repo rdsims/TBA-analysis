@@ -83,6 +83,7 @@ ylabel('OPR');
 figure;
 bar(percentile, sorted_OPR(:,[AUTO GEAR FOUL CLIMB FUEL]), 'stacked');
 grid on;
+xlabel('Percentile');
 ylabel('OPR');
 title('All Teams');
 legend('Auto', 'Gear', 'Foul', 'Climb', 'Fuel', 'Location', 'NorthWest');

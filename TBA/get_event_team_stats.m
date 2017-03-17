@@ -1,7 +1,7 @@
 function [team_num, stat_cols, OPR, DPR] = get_event_team_stats(filename)
 
-QUAL_MATCHES_ONLY = 1;          % set to 1 to match TBA's OPR
-RANKING_POINTS_TO_SCORE = 0;    % set to 0 to match TBA's OPR
+QUAL_MATCHES_ONLY = 0;          % set to 1 to match TBA's OPR
+RANKING_POINTS_TO_SCORE = 1;    % set to 0 to match TBA's OPR
 
 if QUAL_MATCHES_ONLY
     filter = 'qm';
@@ -50,8 +50,10 @@ if ~isempty(data)
     
     if RANKING_POINTS_TO_SCORE
     % convert ranking points to points
-        score(:,FUEL) = score(:,FUEL) +  20*cell2mat(data(:,fuel_rp_col));
-        score(:,GEAR) = score(:,GEAR) + 100*cell2mat(data(:,gear_rp_col));
+        score(:,TOTAL) = score(:,TOTAL) +  20*cell2mat(data(:,fuel_rp_col));
+        score(:, FUEL) = score(:, FUEL) +  20*cell2mat(data(:,fuel_rp_col));
+        score(:,TOTAL) = score(:,TOTAL) + 100*cell2mat(data(:,gear_rp_col));
+        score(:, GEAR) = score(:, GEAR) + 100*cell2mat(data(:,gear_rp_col));
     end
     
     Team_Matrix = [];

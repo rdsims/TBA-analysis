@@ -28,6 +28,29 @@ with open(filename, 'wb') as csvFile:
 
 event_list = tba.tba_get('events/2017')
 
+# get list of event names
+rec = np.zeros(len(event_list), dtype=[('event_key','U16'), ('event_name','U80')])
+for e in range(0, len(event_list)):
+    rec[e] = ( event_list[e]['key'], event_list[e]['name'] )
+
+directory = "data"
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
+filename = directory + "/events.csv"
+with open(filename, 'wb') as csvFile:
+    np.savetxt(csvFile, rec, '%s', delimiter=",")
+
+
+
+
+
+
+
+
+
+
+
 for event in event_list:
     
     event_start_date = datetime.strptime(event['start_date'], '%Y-%m-%d')    # convert date string to date structure

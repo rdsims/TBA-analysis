@@ -2,24 +2,34 @@
 
 ccc;
 
-directory = 'data/week0';
-event_name = '2017vahay';
+% directory = 'data/week0';   event_name = '2017vahay';
+% directory = 'data/week0';   event_name = '2017vabla';
+% directory = 'data/week1';   event_name = '2017mdbet';
+directory = 'data/week2';   event_name = '2017mdowi';
+% directory = 'data/week2';   event_name = '2017vapor';
+% directory = 'data/week3';   event_name = '2017mdedg';
+% directory = 'data/week3';   event_name = '2017vagle';
+% directory = 'data/week5';   event_name = '2017chcmp';
 
 font_size = 16;
 
-chs_teams = get_chs_teams();
-
-team_num = [];
-OPR = [];
-DPR = [];
-
 filename = sprintf('%s/%s.csv', directory, event_name);
 [team_num, stat_cols, OPR, DPR] = get_event_team_stats(filename);
+all_events = get_event_names();
+title_str = 'Unknown Event';
+for k=1:length(all_events)
+    if strcmp(all_events(k).key, event_name)
+        title_str = all_events(k).name;
+    end
+end
+       
 
 % sort
 [team_num, idx] = sort(team_num);
 OPR = OPR(idx,:);
 DPR = DPR(idx,:);
+
+team_686_idx = find(team_num == 686);
 
 TOTAL = 1;
 AUTO  = 2;
@@ -29,13 +39,6 @@ CLIMB = 5;
 FOUL  = 6;
 
 
-
-chs_team_idx = ismember(team_num, chs_teams);
-team_num = team_num(chs_team_idx).';
-team_686_idx = find(team_num == 686);
-
-OPR = OPR(chs_team_idx,:);
-DPR = DPR(chs_team_idx,:);
 
 % OPR(OPR<0) = 0; % remove negative numbers that mess up stacked bar plots
 
@@ -52,14 +55,14 @@ hold off;
 grid on;
 xlabel('Team Number');
 ylabel('OPR');
-title(sprintf('%s Event', event_name));
+title(title_str);
 
 
 figure;
 bar(1:length(team_num), sorted_OPR(:,[AUTO GEAR FOUL CLIMB FUEL]), 'stacked');
 grid on;
 ylabel('OPR');
-title(sprintf('%s Event', event_name));
+title(title_str);
 legend('Auto', 'Gear', 'Foul', 'Climb', 'Fuel', 'Location', 'NorthWest');
 for k=1:length(team_num)
     h = text(k,sorted_OPR(k)+1,num2str(sorted_team_num(k),'%d'),...
@@ -81,7 +84,7 @@ subplot(311);
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Auto OPR');
-title(sprintf('%s Event', event_name));
+title(title_str);
 for k=1:length(team_num)
     h = text(k,x(k)+1,num2str(team_num(i(k)),'%d'),...
         'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
@@ -128,7 +131,7 @@ end
 xlim([0 length(team_num)+1]);
 ylim([-5 30]);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print('-dpng', sprintf('plots/%s_opr_bar2.png',event_name), '-r100');
+print('-dpng', sprintf('plots/%s_opr_bkdn_1.png',event_name), '-r100');
 
 figure;
 subplot(211);
@@ -136,7 +139,7 @@ subplot(211);
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Gear OPR');
-title(sprintf('%s Event', event_name));
+title(title_str);
 for k=1:length(team_num)
     h = text(k,x(k)+1,num2str(team_num(i(k)),'%d'),...
         'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
@@ -166,7 +169,7 @@ end
 xlim([0 length(team_num)+1]);
 ylim([-5 70]);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print('-dpng', sprintf('plots/%s_opr_bar3.png',event_name), '-r100');
+print('-dpng', sprintf('plots/%s_opr_bkdn_2.png',event_name), '-r100');
 
 
 
@@ -182,7 +185,7 @@ hold on;
 line([-1000 1000], [-1000 1000], 'color', 'k', 'linestyle', '--');
 plot(DPR(team_686_idx), OPR(team_686_idx), 'ro');
 hold off;
-title(sprintf('%s Event', event_name));
+title(title_str);
 for k=1:length(team_num)
     h = text(DPR(k,TOTAL)+0.5,OPR(k,TOTAL)+0.5,num2str(team_num(k),'%d'),...
         'Rotation',45,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
@@ -210,17 +213,17 @@ for col = TOTAL:FOUL
     subplot(FOUL,1,col);
     n = histc(OPR(:,col),edges);
     bar(edges,n);
-    hold on;
-    line([1 1]*OPR(team_686_idx,col), [0 max(n)], 'Color','red', 'LineStyle','--', 'LineWidth',3);
-    h = text(OPR(team_686_idx,col),0,'686',...
-        'Rotation',90,'HorizontalAlignment','Right','VerticalAlignment',...
-        'Middle','FontSize',font_size, 'Color', 'r');
-    hold off;
+    if ~isempty(team_686_idx)
+        line([1 1]*OPR(team_686_idx,col), [0 max(n)], 'Color','red', 'LineStyle','--', 'LineWidth',3);
+        h = text(OPR(team_686_idx,col),0,'686',...
+            'Rotation',90,'HorizontalAlignment','Right','VerticalAlignment',...
+            'Middle','FontSize',font_size, 'Color', 'r');
+    end
     xlim([edges(1) edges(end)]);
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title(sprintf('OPR Distribution, %s Event', event_name));
+        title(sprintf('%s\nOPR Distribution', title_str));
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
@@ -236,17 +239,17 @@ for col = TOTAL:FOUL
     subplot(FOUL,1,col);
     n = histc(DPR(:,col),edges);
     bar(edges,n);
-    hold on;
-    line([1 1]*DPR(team_686_idx,col), [0 max(n)], 'Color','red', 'LineStyle','--', 'LineWidth',3);
-    h = text(DPR(team_686_idx,col),0,'686',...
-        'Rotation',90,'HorizontalAlignment','Right','VerticalAlignment',...
-        'Middle','FontSize',font_size, 'Color', 'r');
-    hold off;
+    if ~isempty(team_686_idx)
+        line([1 1]*DPR(team_686_idx,col), [0 max(n)], 'Color','red', 'LineStyle','--', 'LineWidth',3);
+        h = text(DPR(team_686_idx,col),0,'686',...
+            'Rotation',90,'HorizontalAlignment','Right','VerticalAlignment',...
+            'Middle','FontSize',font_size, 'Color', 'r');
+    end
     xlim([edges(1) edges(end)]);
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title(sprintf('DPR Distribution, %s Event', event_name));
+        title(sprintf('%s\nDPR Distribution', title_str));
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
@@ -264,17 +267,17 @@ for col = TOTAL:FOUL
     subplot(FOUL,1,col);
     n = histc(CCWM(:,col),edges);
     bar(edges,n);
-    hold on;
-    line([1 1]*CCWM(team_686_idx,col), [0 max(n)], 'Color','red', 'LineStyle','--', 'LineWidth',3);
-    h = text(CCWM(team_686_idx,col),0,'686',...
-        'Rotation',90,'HorizontalAlignment','Right','VerticalAlignment',...
-        'Middle','FontSize',font_size, 'Color', 'r');
-    hold off;
+    if ~isempty(team_686_idx)
+        line([1 1]*CCWM(team_686_idx,col), [0 max(n)], 'Color','red', 'LineStyle','--', 'LineWidth',3);
+        h = text(CCWM(team_686_idx,col),0,'686',...
+            'Rotation',90,'HorizontalAlignment','Right','VerticalAlignment',...
+            'Middle','FontSize',font_size, 'Color', 'r');
+    end
     xlim([edges(1) edges(end)]);
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title(sprintf('CCWM Distribution, %s Event', event_name));
+        title(sprintf('%s\nCCWM Distribution', title_str));
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);

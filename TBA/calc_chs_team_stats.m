@@ -147,7 +147,7 @@ end
 xlim([0 length(team_num)+1]);
 ylim([-5 30]);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_bar2.png -r100;
+print -dpng plots/chs_opr_bkdn_1.png -r100;
 
 figure;
 subplot(211);
@@ -185,7 +185,7 @@ end
 xlim([0 length(team_num)+1]);
 ylim([-5 70]);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_bar3.png -r100;
+print -dpng plots/chs_opr_bkdn_2.png -r100;
 
 
 
