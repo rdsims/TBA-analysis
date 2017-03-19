@@ -92,9 +92,9 @@ for event in event_list:
             match = matches[m]
         
         
-            for alliance in alliances:
-
-                if match['alliances'][alliance]['score'] > 0:
+            if (match['alliances']['red']['score'] > 0) or (match['alliances']['blue']['score'] > 0):
+                
+                for alliance in alliances:
         
                     # move 40 points for rotors in auto to a rotor point total
                     # auto rotor points will be 20 point bonus only
