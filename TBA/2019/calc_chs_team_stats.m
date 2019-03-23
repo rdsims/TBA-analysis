@@ -10,7 +10,7 @@ team_num = [];
 OPR = [];
 DPR = [];
 
-for week = 0:0
+for week = 0:3
     directory = sprintf('data/week%d', week);
     
     events = dir(sprintf('%s/*.csv', directory));

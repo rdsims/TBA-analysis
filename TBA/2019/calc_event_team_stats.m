@@ -4,9 +4,9 @@ ccc;
 
 directory = 'data/week0';   event_name = '2019vahay';
 directory = 'data/week0';   event_name = '2019vagle';
-% directory = 'data/week1';   event_name = '2019mdbet';
-% directory = 'data/week2';   event_name = '2019mdowi';
-% directory = 'data/week2';   event_name = '2019vapor';
+directory = 'data/week1';   event_name = '2019mdbet';
+directory = 'data/week2';   event_name = '2019mdowi';
+directory = 'data/week2';   event_name = '2019vapor';
 % directory = 'data/week3';   event_name = '2019mdedg';
 % directory = 'data/week3';   event_name = '2019vagle';
 % directory = 'data/week5';   event_name = '2019chcmp';

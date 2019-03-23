@@ -86,9 +86,12 @@ if ~isempty(data)
 
 end
 
-        Team_Matrix = Team_Matrix(2*30:end,:);
-        Score_For = Score_For(2*30:end,:);
-        Score_Against = Score_Against(2*30:end,:);
+%         Team_Matrix = Team_Matrix(2*30:end,:);
+%         Score_For = Score_For(2*30:end,:);
+%         Score_Against = Score_Against(2*30:end,:);
+%         Team_Matrix = Team_Matrix(1:2*55,:);
+%         Score_For = Score_For(1:2*55,:);
+%         Score_Against = Score_Against(1:2*55,:);
 
 % solve Team_Matrix*OPR = Score_For for OPR
 % solve Team_Matrix*DPR = Score_Against for DPR
