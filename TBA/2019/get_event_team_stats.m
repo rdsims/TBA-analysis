@@ -1,4 +1,4 @@
-function [team_num, stat_cols, OPR, DPR] = get_event_team_stats(filename)
+function [team_num, stat_cols, OPR, DPR, SoS] = get_event_team_stats(filename)
 
 QUAL_MATCHES_ONLY = 1;          % set to 1 to match TBA's OPR
 RANKING_POINTS_TO_SCORE = 1;    % set to 0 to match TBA's OPR
@@ -86,6 +86,7 @@ if ~isempty(data)
 
 end
 
+% Mask out certain matches
 %         Team_Matrix = Team_Matrix(2*30:end,:);
 %         Score_For = Score_For(2*30:end,:);
 %         Score_Against = Score_Against(2*30:end,:);
@@ -105,5 +106,32 @@ end
 
 
 
+% Calculate Strength of Schedule based on OPR (post-event calculation)
 
+% remove fouls from SoS calculation
+sosOPR(:,TOTAL) = OPR(:,TOTAL) - OPR(:,FOUL);
 
+SoS = zeros(num_teams,1);
+
+for team_idx=1:num_teams
+    SoS(team_idx) = 0;
+    % find all matches this team played in
+    team_match_idx = find(Team_Matrix(:,team_idx));
+    % sum opponents OPR - alliance partner OPR
+    % need to figure out red/blue alliances first
+    for m = 1:numel(team_match_idx)
+        match_idx = team_match_idx(m);
+        our_alliance_teams = find(Team_Matrix(match_idx,:));
+        if mod(match_idx,2) == 1
+            opp_alliance_teams = find(Team_Matrix(match_idx+1,:));
+        else
+            opp_alliance_teams = find(Team_Matrix(match_idx-1,:));
+        end    
+        our_opr = sum(sosOPR(our_alliance_teams,TOTAL));
+        opp_opr = sum(sosOPR(opp_alliance_teams,TOTAL));
+        SoS(team_idx) = SoS(team_idx) + our_opr - sosOPR(team_idx,TOTAL) - opp_opr;
+    end
+    % calc average
+    SoS(team_idx) = SoS(team_idx) / numel(team_match_idx);
+end
+SoS = SoS - mean(SoS);

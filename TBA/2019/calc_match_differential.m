@@ -1,6 +1,7 @@
 % get_match_differential_all_weeks
 
-ccc;
+close all;
+clear all;
 
 filter = 'f';   % playoffs only
 

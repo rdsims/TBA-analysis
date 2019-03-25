@@ -1,6 +1,7 @@
 % get_all_team_stats
 
-ccc;
+close all;
+clear all;
 
 font_size = 10;
 
@@ -133,7 +134,7 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('OPR Distribution, All Teams, Latest Match');
+        title('OPR Distribution, All Teams, Latest Event');
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
@@ -161,7 +162,7 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('DPR Distribution, All Teams, Latest Match');
+        title('DPR Distribution, All Teams, Latest Event');
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
@@ -191,7 +192,7 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('CCWM Distribution, All Teams, Latest Match');
+        title('CCWM Distribution, All Teams, Latest Event');
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);

@@ -1,6 +1,7 @@
 % get_chs_team_stats
 
-ccc;
+close all;
+clear all;
 
 font_size = 9;
 
@@ -60,7 +61,8 @@ DPR = DPR(chs_team_idx,:);
 
 % OPR(OPR<0) = 0; % remove negative numbers that mess up stacked bar plots
 
-[~, sort_idx] = sort(OPR(:,TOTAL),1,'ascend');
+% [~, sort_idx] = sort(OPR(:,TOTAL),1,'ascend');
+[~, sort_idx] = sort(sum(OPR(:,AUTO:CLIMB),2),1,'ascend');
 sorted_OPR = OPR(sort_idx,:);
 sorted_team_num = team_num(sort_idx);
 team_686_sorted_idx = find(sorted_team_num == 686);

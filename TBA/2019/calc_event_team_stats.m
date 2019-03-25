@@ -1,25 +1,30 @@
 % get_event_team_stats
 
-ccc;
+close all;
+clear all;
 
 directory = 'data/week0';   event_name = '2019vahay';
 directory = 'data/week0';   event_name = '2019vagle';
 directory = 'data/week1';   event_name = '2019mdbet';
-directory = 'data/week2';   event_name = '2019mdowi';
 directory = 'data/week2';   event_name = '2019vapor';
-% directory = 'data/week3';   event_name = '2019mdedg';
-% directory = 'data/week3';   event_name = '2019vagle';
+directory = 'data/week2';   event_name = '2019mdowi';
+directory = 'data/week3';   event_name = '2019mdoxo';
+% directory = 'data/week4';   event_name = '2019vabla';
 % directory = 'data/week5';   event_name = '2019chcmp';
 
 font_size = 16;
 
 filename = sprintf('%s/%s.csv', directory, event_name);
-[team_num, stat_cols, OPR, DPR] = get_event_team_stats(filename);
+[team_num, stat_cols, OPR, DPR, SoS] = get_event_team_stats(filename);
 all_events = get_event_names();
 title_str = 'Unknown Event';
 for k=1:length(all_events)
     if strcmp(all_events(k).key, event_name)
         title_str = all_events(k).name;
+        k = strfind(title_str,' sponsored');
+        if k>0
+            title_str = title_str(1:k);
+        end
     end
 end
        
@@ -43,7 +48,8 @@ ADJUST  = 7;
 
 % OPR(OPR<0) = 0; % remove negative numbers that mess up stacked bar plots
 
-[~, sort_idx] = sort(OPR(:,TOTAL),1,'ascend');
+% [~, sort_idx] = sort(OPR(:,TOTAL),1,'ascend');
+[~, sort_idx] = sort(sum(OPR(:,AUTO:CLIMB),2),1,'ascend');
 sorted_OPR = OPR(sort_idx,:);
 sorted_team_num = team_num(sort_idx);
 team_686_sorted_idx = find(sorted_team_num == 686);
@@ -316,3 +322,36 @@ for col = TOTAL:FOUL
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
 print('-dpng', sprintf('plots/%s_ccwm_dist.png',event_name), '-r100');
+
+
+
+
+% Strength of Schedule Plots
+
+[~, sort_idx] = sort(SoS(:,TOTAL),1,'ascend');
+sorted_SoS = SoS(sort_idx,:);
+sorted_team_num = team_num(sort_idx);
+team_686_sorted_idx = find(sorted_team_num == 686);
+
+figure;
+bar(1:length(team_num), sorted_SoS);
+grid on;
+ylabel('Average Extra OPR due to Schedule');
+title(title_str);
+for k=1:length(team_num)
+    if  (sorted_SoS(k) > 0)
+        h = text(k,sorted_SoS(k)+0.25,num2str(sorted_team_num(k),'%d'),...
+            'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
+    else
+        h = text(k,sorted_SoS(k)-0.25,num2str(sorted_team_num(k),'%d'),...
+            'Rotation',90,'HorizontalAlignment','Right','VerticalAlignment','Middle','FontSize',font_size);
+    end
+    if (sorted_team_num(k) == 686)
+        set(h,'Color','r');
+    end
+end
+xlim([0 length(team_num)+1]);
+ylim([floor(min(SoS)-1) ceil(max(SoS)+1)]);
+
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
+print('-dpng', sprintf('plots/%s_sos_bar.png',event_name), '-r100');
