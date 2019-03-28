@@ -1,45 +1,13 @@
-% get_chs_team_stats
+% get_chs_dchmp_team_stats
 
 close all;
 clear all;
 
 font_size = 9;
 
-chs_teams = get_chs_teams();
+dchmp_teams = get_chs_dchmp_teams();
+[team_num, stat_cols, OPR, DPR] = get_previous_event_team_stats(dchmp_teams);
 
-team_num = [];
-OPR = [];
-DPR = [];
-
-for week = 0:3
-    directory = sprintf('data/week%d', week);
-    
-    events = dir(sprintf('%s/*.csv', directory));
-    
-    for event = events'
-        filename = sprintf('%s/%s', directory, event.name);
-        [event_team_num, stat_cols, event_OPR, event_DPR] = get_event_team_stats(filename);
-        
-        for k = 1:length(event_team_num)
-            idx = find(event_team_num(k) == team_num, 1, 'first');
-            if isempty(idx)
-                % first event, add to table
-                team_num(end+1) = event_team_num(k);
-                OPR(end+1,:) = event_OPR(k,:);
-                DPR(end+1,:) = event_DPR(k,:);
-            else
-                % >= 2nd event, update stats with latest event
-                OPR(idx,:) = event_OPR(k,:);
-                DPR(idx,:) = event_DPR(k,:);
-            end
-        end
-        
-        % sort
-        [team_num, idx] = sort(team_num);
-        OPR = OPR(idx,:);
-        DPR = DPR(idx,:);
-    end
-end
 
 TOTAL = 1;
 AUTO  = 2;
@@ -50,14 +18,12 @@ FOUL  = 6;
 ADJUST  = 7;
 
 
-
-
-chs_team_idx = ismember(team_num, chs_teams);
-team_num = team_num(chs_team_idx).';
+chs_dchmp_team_idx = ismember(team_num, dchmp_teams);
+team_num = team_num(chs_dchmp_team_idx).';
 team_686_idx = find(team_num == 686);
 
-OPR = OPR(chs_team_idx,:);
-DPR = DPR(chs_team_idx,:);
+OPR = OPR(chs_dchmp_team_idx,:);
+DPR = DPR(chs_dchmp_team_idx,:);
 
 % OPR(OPR<0) = 0; % remove negative numbers that mess up stacked bar plots
 
@@ -75,14 +41,14 @@ hold off;
 grid on;
 xlabel('Team Number');
 ylabel('OPR');
-title('Chesapeake District Teams');
+title('CHS District Championship Teams');
 
 
 figure;
 bar(1:length(team_num), sorted_OPR(:,[CLIMB CARGO PANEL AUTO FOUL ADJUST]), 'stacked');
 grid on;
 ylabel('OPR');
-title('Chesapeake District Teams');
+title('CHS District Championship Teams');
 legend('Climb', 'Cargo', 'Panel', 'Auto', 'Foul', 'Adjust', 'Location', 'NorthEast');
 for k=1:length(team_num)
     h = text(k,sorted_OPR(k)+1,num2str(sorted_team_num(k),'%d'),...
@@ -95,7 +61,7 @@ for k=1:length(team_num)
 end
 xlim([0 length(team_num)+1]);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_bar.png -r100;
+print -dpng plots/chs_dchmp_opr_bar.png -r100;
 
 
 figure;
@@ -104,7 +70,7 @@ subplot(211);
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Auto OPR');
-title('Chesapeake District Teams');
+title('CHS District Championship Teams');
 for k=1:length(team_num)
     h = text(k,x(k)+1,num2str(team_num(i(k)),'%d'),...
         'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
@@ -135,7 +101,7 @@ xlim([0 length(team_num)+1]);
 ylim([-5 20]);
 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_bkdn_1.png -r100;
+print -dpng plots/chs_dchmp_opr_bkdn_1.png -r100;
 
 
 
@@ -162,7 +128,7 @@ subplot(212);
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Cargo OPR');
-title('Chesapeake District Teams');
+title('CHS District Championship Teams');
 for k=1:length(team_num)
     h = text(k,x(k)+1,num2str(team_num(i(k)),'%d'),...
         'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
@@ -176,7 +142,7 @@ xlim([0 length(team_num)+1]);
 ylim([-5 20]);
 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_bkdn_2.png -r100;
+print -dpng plots/chs_dchmp_opr_bkdn_2.png -r100;
 
 
 
@@ -216,7 +182,7 @@ xlim([0 length(team_num)+1]);
 ylim([-5 10]);
 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_bkdn_3.png -r100;
+print -dpng plots/chs_dchmp_opr_bkdn_3.png -r100;
 
 
 
@@ -230,7 +196,7 @@ hold on;
 line([-1000 1000], [-1000 1000], 'color', 'k', 'linestyle', '--');
 plot(DPR(team_686_idx), OPR(team_686_idx), 'ro');
 hold off;
-title('Chesapeake District Teams');
+title('CHS District Championship Teams');
 for k=1:length(team_num)
     h = text(DPR(k,TOTAL)+0.5,OPR(k,TOTAL)+0.5,num2str(team_num(k),'%d'),...
         'Rotation',45,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
@@ -241,7 +207,7 @@ h = text(DPR(team_686_idx,TOTAL)+0.5,OPR(team_686_idx,TOTAL)+0.5,num2str(team_nu
 xlim([0 20*ceil(max(DPR(:,TOTAL))/20)]);
 ylim([0 20*ceil(max(OPR(:,TOTAL))/20)]);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_dpr.png -r100;
+print -dpng plots/chs_dchmp_opr_dpr.png -r100;
 
 
 
@@ -269,11 +235,11 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('OPR Distribution, CHS Teams, Latest Event');
+        title('OPR Distribution, CHS DCHMP Teams, Latest Event');
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_opr_dist.png -r100;
+print -dpng plots/chs_dchmp_opr_dist.png -r100;
 
 figure;
 for col = TOTAL:FOUL
@@ -297,11 +263,11 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('DPR Distribution, CHS Teams, Latest Event');
+        title('DPR Distribution, CHS DCHMP Teams, Latest Event');
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dpr_dist.png -r100;
+print -dpng plots/chs_dchmp_dpr_dist.png -r100;
 
 CCWM = OPR - DPR;
 
@@ -327,8 +293,8 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('CCWM Distribution, CHS Teams, Latest Event');
+        title('CCWM Distribution, CHS DCHMP Teams, Latest Event');
     end
 end
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_ccwm_dist.png -r100;
+print -dpng plots/chs_dchmp_ccwm_dist.png -r100;
