@@ -40,15 +40,15 @@ for k = 1:length(matches)
 end
 
 
+delta_y = 0.2;
 
 for first_match_on_sheet = 1:matches_per_sheet:length(matches)
     sheet_matches = first_match_on_sheet + (0:+matches_per_sheet-1);
     sheet_matches = sheet_matches(sheet_matches <= matches(end));
 
-
     y = mod(sheet_matches-1, matches_per_sheet)+1;
-    red_y = y+0.2;
-    blue_y = y-0.2;
+    red_y  = y-delta_y;
+    blue_y = y+delta_y;
 
     figure;
     red_bar = barh(red_y,red_opr(sheet_matches,:),'stacked');
@@ -88,25 +88,19 @@ for first_match_on_sheet = 1:matches_per_sheet:length(matches)
     
         for team=1:3
             x = sum(red_opr(sheet_match,1:team-1)) + red_opr(sheet_match,team)/2;
-            text(x,red_y(kk),sprintf('T%d (%.1f)',red_team(sheet_match,team),red_opr(sheet_match,team)),'Color','y','FontWeight','bold','HorizontalAlignment','center','VerticalAlignment','middle')
+            text(x,red_y(kk),sprintf('%d (%.1f)',red_team(sheet_match,team),red_opr(sheet_match,team)),'Color','y','FontWeight','bold','HorizontalAlignment','center','VerticalAlignment','middle')
             if red_team(sheet_match,team) == 686
-                xRadius = 10;
-                yRadius = 0.15;
-                theta = 0 : 0.01 : 2*pi;
-                x = xRadius * cos(theta) + x;
-                y = yRadius * sin(theta) + red_y(kk);
-                plot(x, y, 'Color', 'y', 'LineWidth', 3);
+                xx =         x + [-1 -1 1 1 -1]*0.48*red_opr(sheet_match,team);
+                yy = red_y(kk) + [-1 1 1 -1 -1]*0.48*2*delta_y;
+                plot(xx, yy, 'Color', 'y', 'LineWidth', 3);
             end
 
             x = sum(blue_opr(sheet_match,1:team-1)) + blue_opr(sheet_match,team)/2;
-            text(x,blue_y(kk),sprintf('T%d (%.1f)',blue_team(sheet_match,team),blue_opr(sheet_match,team)),'Color','y','FontWeight','bold','HorizontalAlignment','center','VerticalAlignment','middle')
+            text(x,blue_y(kk),sprintf('%d (%.1f)',blue_team(sheet_match,team),blue_opr(sheet_match,team)),'Color','y','FontWeight','bold','HorizontalAlignment','center','VerticalAlignment','middle')
             if blue_team(sheet_match,team) == 686
-                xRadius = 10;
-                yRadius = 0.15;
-                theta = 0 : 0.01 : 2*pi;
-                x = xRadius * cos(theta) + x;
-                y = yRadius * sin(theta) + blue_y(kk);
-                plot(x, y, 'Color', 'y', 'LineWidth', 3);
+                xx =          x + [-1 -1 1 1 -1]*0.48*blue_opr(sheet_match,team);
+                yy = blue_y(kk) + [-1 1 1 -1 -1]*0.48*2*delta_y;
+                plot(xx, yy, 'Color', 'y', 'LineWidth', 3);
             end
         end
         x = sum(red_opr(sheet_match,:))+2;
