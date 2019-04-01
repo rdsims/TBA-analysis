@@ -107,4 +107,4 @@ end
 
 
 % Calculate Strength of Schedule based on OPR (post-event calculation)
-SoS = get_event_strength_of_schedule(Team_Matrix, OPR);
+SoS = get_event_strength_of_schedule(team_num, OPR, team_matrix);

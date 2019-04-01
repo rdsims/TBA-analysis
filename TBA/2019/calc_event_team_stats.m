@@ -9,7 +9,7 @@ directory = 'data/week1';   event_name = '2019mdbet';
 directory = 'data/week2';   event_name = '2019vapor';
 directory = 'data/week2';   event_name = '2019mdowi';
 directory = 'data/week3';   event_name = '2019mdoxo';
-% directory = 'data/week4';   event_name = '2019vabla';
+directory = 'data/week4';   event_name = '2019vabla';
 % directory = 'data/week5';   event_name = '2019chcmp';
 
 font_size = 16;
@@ -49,7 +49,7 @@ ADJUST  = 7;
 % OPR(OPR<0) = 0; % remove negative numbers that mess up stacked bar plots
 
 % [~, sort_idx] = sort(OPR(:,TOTAL),1,'ascend');
-[~, sort_idx] = sort(sum(OPR(:,AUTO:CLIMB),2),1,'ascend');
+[~, sort_idx] = sort(sum(OPR(:,AUTO:CLIMB),2),1,'descend');
 sorted_OPR = OPR(sort_idx,:);
 sorted_team_num = team_num(sort_idx);
 team_686_sorted_idx = find(sorted_team_num == 686);
@@ -70,7 +70,7 @@ bar(1:length(team_num), sorted_OPR(:,[CLIMB CARGO PANEL AUTO FOUL ADJUST]), 'sta
 grid on;
 ylabel('OPR');
 title(title_str);
-legend('Climb', 'Cargo', 'Panel', 'Auto', 'Foul', 'Adjust', 'Location', 'NorthWest');
+legend('Climb', 'Cargo', 'Panel', 'Auto', 'Foul', 'Adjust', 'Location', 'NorthEast');
 for k=1:length(team_num)
     h = text(k,sorted_OPR(k)+1,num2str(sorted_team_num(k),'%d'),...
         'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
@@ -89,7 +89,7 @@ print('-dpng', sprintf('plots/%s_opr_bar.png',event_name), '-r100');
 
 figure;
 subplot(211);
-[x,i] = sort(OPR(:,AUTO));
+[x,i] = sort(OPR(:,AUTO),1,'descend');
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Auto OPR');
@@ -107,7 +107,7 @@ xlim([0 length(team_num)+1]);
 ylim([-5 15]);
 
 subplot(212);
-[x,i] = sort(OPR(:,CLIMB));
+[x,i] = sort(OPR(:,CLIMB),1,'descend');
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Climb OPR');
@@ -131,7 +131,7 @@ print('-dpng', sprintf('plots/%s_opr_bkdn_1.png',event_name), '-r100');
 
 figure;
 subplot(211);
-[x,i] = sort(OPR(:,PANEL));
+[x,i] = sort(OPR(:,PANEL),1,'descend');
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Panel OPR');
@@ -150,7 +150,7 @@ ylim([-5 20]);
 
 
 subplot(212);
-[x,i] = sort(OPR(:,CARGO));
+[x,i] = sort(OPR(:,CARGO),1,'descend');
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Cargo OPR');
@@ -175,7 +175,7 @@ print('-dpng', sprintf('plots/%s_opr_bkdn_2.png',event_name), '-r100');
 
 figure;
 subplot(211);
-[x,i] = sort(OPR(:,FOUL));
+[x,i] = sort(OPR(:,FOUL),1,'descend');
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Foul OPR');
@@ -193,7 +193,7 @@ xlim([0 length(team_num)+1]);
 ylim([-5 10]);
 
 subplot(212);
-[x,i] = sort(OPR(:,ADJUST));
+[x,i] = sort(OPR(:,ADJUST),1,'descend');
 bar(1:length(team_num), x);
 % grid on;
 ylabel('Adjust OPR');
@@ -328,7 +328,7 @@ print('-dpng', sprintf('plots/%s_ccwm_dist.png',event_name), '-r100');
 
 % Strength of Schedule Plots
 
-[~, sort_idx] = sort(SoS(:,TOTAL),1,'ascend');
+[~, sort_idx] = sort(SoS(:,TOTAL),1,'descend');
 sorted_SoS = SoS(sort_idx,:);
 sorted_team_num = team_num(sort_idx);
 team_686_sorted_idx = find(sorted_team_num == 686);
@@ -351,7 +351,7 @@ for k=1:length(team_num)
     end
 end
 xlim([0 length(team_num)+1]);
-ylim([floor(min(SoS)-1) ceil(max(SoS)+1)]);
+ylim([floor(min(SoS)-2) ceil(max(SoS)+2)]);
 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
 print('-dpng', sprintf('plots/%s_sos_bar.png',event_name), '-r100');

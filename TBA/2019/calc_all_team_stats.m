@@ -11,7 +11,7 @@ team_num = [];
 OPR = [];
 DPR = [];
 
-for week = 0:3
+for week = 0:4
     directory = sprintf('data/week%d', week);
     
     events = dir(sprintf('%s/*.csv', directory));
@@ -49,7 +49,7 @@ CLIMB = 5;
 FOUL  = 6;
 ADJUST  = 7;
 
-[~, sort_idx] = sort(OPR(:,TOTAL),1,'ascend');
+[~, sort_idx] = sort(OPR(:,TOTAL),1,'descend');
 sorted_OPR = OPR(sort_idx,:);
 sorted_team_num = team_num(sort_idx);
 
@@ -92,7 +92,7 @@ grid on;
 xlabel('Percentile');
 ylabel('OPR');
 title('All Teams');
-legend('Climb', 'Cargo', 'Panel', 'Auto', 'Foul', 'Adjust', 'Location', 'NorthWest');
+legend('Climb', 'Cargo', 'Panel', 'Auto', 'Foul', 'Adjust', 'Location', 'NorthEast');
 % for k=1:length(team_num)
 %     h = text(k,sorted_OPR(k)+1,num2str(sorted_team_num(k),'%d'),...
 %         'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
