@@ -7,7 +7,7 @@ filter = 'f';   % playoffs only
 
 cols_to_use = 5:10;
 
-for week = 0:8
+for week = 0:4
     directory = sprintf('data/week%d', week);
     
     events = dir(sprintf('%s/*.csv', directory));
