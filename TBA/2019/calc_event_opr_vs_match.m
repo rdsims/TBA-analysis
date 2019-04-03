@@ -116,6 +116,9 @@ title(sprintf('Team 686 Points & OPR vs Match\nBethesda Event 2019'));
 grid on;
 legend('OPR','Actual Match Points','Average Match Points','Location','NorthEast');
 
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
+print -dpng plots/bethesda_opr_vs_match_686.png -r100;
+
 figure;
 plot(matches,OPR(:,:,1));
 xlabel('Qualification Match #');
@@ -123,6 +126,9 @@ ylabel('OPR');
 title(sprintf('OPR vs Match\nBethesda Event 2019'));
 grid on;
 % legend('OPR','Actual Match Points','Average Match Points','Location','NorthEast');
+
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
+print -dpng plots/bethesda_opr_vs_match.png -r100;
 
 
 
@@ -238,6 +244,9 @@ title(sprintf('Team 686 Points & OPR vs Match\nMcDonogh Event 2019'));
 grid on;
 legend('OPR','Actual Match Points','Average Match Points','Location','NorthEast');
 
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
+print -dpng plots/mcdonogh_opr_vs_match_686.png -r100;
+
 figure;
 plot(matches,OPR(:,:,1));
 xlabel('Qualification Match #');
@@ -245,3 +254,6 @@ ylabel('OPR');
 title(sprintf('OPR vs Match\nMcDonogh Event 2019'));
 grid on;
 % legend('OPR','Actual Match Points','Average Match Points','Location','NorthEast');
+
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
+print -dpng plots/mcdonogh_opr_vs_match.png -r100;
