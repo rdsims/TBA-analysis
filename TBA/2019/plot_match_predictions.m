@@ -1,4 +1,4 @@
-function plot_match_predictions(team_matrix, team_num, OPR, team_filter, matches_per_sheet)
+function plot_match_predictions(team_matrix, team_num, OPR, team_filter, title_str, matches_per_sheet)
 
 % apply team filter
 if isempty(team_filter)
@@ -41,6 +41,7 @@ end
 
 
 delta_y = 0.2;
+filenames = {};
 
 for first_match_on_sheet = 1:matches_per_sheet:length(matches)
     sheet_matches = first_match_on_sheet + (0:+matches_per_sheet-1);
@@ -111,4 +112,18 @@ for first_match_on_sheet = 1:matches_per_sheet:length(matches)
         val = sum(blue_opr(sheet_match,:));
         text(x,blue_y(kk),num2str(val,'%.1f'),'Color','b','FontWeight','bold','HorizontalAlignment','left','VerticalAlignment','middle')
     end
+
+    set(gcf,'PaperUnits','inches','PaperSize',[8.5 11]);
+    filenames{end+1} = sprintf('plots/%s_%d.pdf', title_str, first_match_on_sheet); %#ok<AGROW>
+    print(filenames{end},'-dpdf', '-fillpage');
+    
+end
+
+% need to install https://www.mathworks.com/matlabcentral/fileexchange/23629-export_fig
+
+filename = sprintf('plots/%s.pdf', title_str);
+append_pdfs(filename, filenames{:});
+
+for kk = 1:numel(filenames)
+    delete(filenames{kk});
 end

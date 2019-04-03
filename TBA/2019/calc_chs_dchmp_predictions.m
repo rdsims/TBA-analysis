@@ -108,10 +108,10 @@ ylim([floor(min(SoS)-1) ceil(max(SoS)+1)]);
 % 686 Match Predictions
 team_filter = 686;
 matches_per_sheet = 12;
-plot_match_predictions(team_matrix, team_num, OPR, team_filter, matches_per_sheet);
+plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions_team_686', matches_per_sheet);
 
 % All Match Predictions
 team_filter = [];
 matches_per_sheet = 12;
-plot_match_predictions(team_matrix, team_num, OPR, team_filter, matches_per_sheet);
+plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions', matches_per_sheet);
 
