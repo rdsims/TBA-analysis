@@ -1,4 +1,4 @@
-% calc_chs_dchmp_predictions
+% calc_chcmp_predictions
 
 % District Champ match predictions based solely on previous event OPR
 
@@ -17,27 +17,42 @@ ADJUST  = 7;
 
 title_str = 'CHS District Champs Predictions';
 
-if exist('test.mat', 'file')
-    load('test.mat');
-else
-
-    dchmp_teams = get_chs_dchmp_teams();
-    [team_num, stat_cols, OPR, DPR] = get_previous_event_team_stats(dchmp_teams);
-
-    % remove foul OPR and adjust TOTAL OPR
-    OPR(:,FOUL) = 0;
-    OPR(:,ADJUST) = 0;
-    OPR(:,TOTAL) = sum(OPR(:,AUTO:CLIMB),2);
-
-    save('test.mat','team_num', 'OPR');
-end
-
-
 week = 5;
 event_name = '2019chcmp.csv';
 filename = sprintf('data/week%d/%s', week, event_name);
 
+dchmp_teams = get_event_teams(filename);
+[team_num, stat_cols, OPR, DPR] = get_previous_event_team_stats(dchmp_teams, week-1);
+
+% remove foul OPR and adjust TOTAL OPR
+OPR(:,FOUL) = 0;
+OPR(:,ADJUST) = 0;
+OPR(:,TOTAL) = sum(OPR(:,AUTO:CLIMB),2);
+
+DPR(:,FOUL) = 0;
+DPR(:,ADJUST) = 0;
+DPR(:,TOTAL) = sum(DPR(:,AUTO:CLIMB),2);
+
 [team_matrix, match_scores, team_record, team_RPs, SoS] = get_event_predictions(filename, team_num, OPR);
+
+
+
+
+
+% 686 Match Predictions
+team_filter = 686;
+matches_per_sheet = 12;
+plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions_team_686', matches_per_sheet);
+
+% All Match Predictions
+team_filter = [];
+matches_per_sheet = 12;
+plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions', matches_per_sheet);
+
+
+
+
+
 
 
 
@@ -105,13 +120,10 @@ ylim([floor(min(SoS)-1) ceil(max(SoS)+1)]);
 
 
 
-% 686 Match Predictions
-team_filter = 686;
-matches_per_sheet = 12;
-plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions_team_686', matches_per_sheet);
 
-% All Match Predictions
-team_filter = [];
-matches_per_sheet = 12;
-plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions', matches_per_sheet);
+filename = sprintf('plots/%s.pdf', title_str);
+append_pdfs(filename, filenames{:});
 
+for kk = 1:numel(filenames)
+    delete(filenames{kk});
+end

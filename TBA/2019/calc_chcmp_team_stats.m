@@ -1,12 +1,16 @@
-% get_chs_dchmp_team_stats
+% get_chs_chcmp_team_stats
 
 close all;
 clear all;
 
 font_size = 9;
 
-dchmp_teams = get_chs_dchmp_teams();
-[team_num, stat_cols, OPR, DPR] = get_previous_event_team_stats(dchmp_teams);
+week = 5;
+event_name = '2019chcmp.csv';
+filename = sprintf('data/week%d/%s', week, event_name);
+
+chcmp_teams = get_event_teams(filename);
+[team_num, stat_cols, OPR, DPR] = get_previous_event_team_stats(chcmp_teams, week-1);
 
 
 TOTAL = 1;
@@ -18,12 +22,12 @@ FOUL  = 6;
 ADJUST  = 7;
 
 
-chs_dchmp_team_idx = ismember(team_num, dchmp_teams);
-team_num = team_num(chs_dchmp_team_idx).';
+chs_chcmp_team_idx = ismember(team_num, chcmp_teams);
+team_num = team_num(chs_chcmp_team_idx).';
 team_686_idx = find(team_num == 686);
 
-OPR = OPR(chs_dchmp_team_idx,:);
-DPR = DPR(chs_dchmp_team_idx,:);
+OPR = OPR(chs_chcmp_team_idx,:);
+DPR = DPR(chs_chcmp_team_idx,:);
 
 % OPR(OPR<0) = 0; % remove negative numbers that mess up stacked bar plots
 
@@ -61,7 +65,9 @@ for k=1:length(team_num)
 end
 xlim([0 length(team_num)+1]);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_opr_bar.png -r100;
+print('plots/chs_chcmp_opr_bar.png', '-dpng', '-r100');
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_opr_bar.pdf', '-dpdf', '-fillpage');
 
 
 figure;
@@ -100,8 +106,8 @@ end
 xlim([0 length(team_num)+1]);
 ylim([-5 20]);
 
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_opr_bkdn_1.png -r100;
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_opr_bkdn_1.pdf', '-dpdf', '-fillpage');
 
 
 
@@ -141,9 +147,8 @@ end
 xlim([0 length(team_num)+1]);
 ylim([-5 20]);
 
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_opr_bkdn_2.png -r100;
-
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_opr_bkdn_2.pdf', '-dpdf', '-fillpage');
 
 
 figure;
@@ -181,9 +186,8 @@ end
 xlim([0 length(team_num)+1]);
 ylim([-5 10]);
 
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_opr_bkdn_3.png -r100;
-
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_opr_bkdn_3.pdf', '-dpdf', '-fillpage');
 
 
 figure;
@@ -206,9 +210,9 @@ h = text(DPR(team_686_idx,TOTAL)+0.5,OPR(team_686_idx,TOTAL)+0.5,num2str(team_nu
     'Color','r');
 xlim([0 20*ceil(max(DPR(:,TOTAL))/20)]);
 ylim([0 20*ceil(max(OPR(:,TOTAL))/20)]);
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_opr_dpr.png -r100;
 
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_opr_dpr.pdf', '-dpdf', '-fillpage');
 
 
 
@@ -235,11 +239,12 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('OPR Distribution, CHS DCHMP Teams, Latest Event');
+        title('OPR Distribution, CHS chcmp Teams, Latest Event');
     end
 end
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_opr_dist.png -r100;
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_opr_dist.pdf', '-dpdf', '-fillpage');
+
 
 figure;
 for col = TOTAL:FOUL
@@ -263,11 +268,12 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('DPR Distribution, CHS DCHMP Teams, Latest Event');
+        title('DPR Distribution, CHS chcmp Teams, Latest Event');
     end
 end
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_dpr_dist.png -r100;
+
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_dpr_dist.pdf', '-dpdf', '-fillpage');
 
 CCWM = OPR - DPR;
 
@@ -293,8 +299,26 @@ for col = TOTAL:FOUL
     ylabel(stat_cols(col));
     grid on;
     if col==1
-        title('CCWM Distribution, CHS DCHMP Teams, Latest Event');
+        title('CCWM Distribution, CHS chcmp Teams, Latest Event');
     end
 end
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 16 9]);
-print -dpng plots/chs_dchmp_ccwm_dist.png -r100;
+
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 11 8.5], 'PaperOrientation', 'landscape');
+print('plots/chs_chcmp_ccwm_dist.pdf', '-dpdf', '-fillpage');
+
+filenames = {...
+    'plots/chs_chcmp_opr_bar.pdf',...
+    'plots/chs_chcmp_opr_bkdn_1.pdf',...
+    'plots/chs_chcmp_opr_bkdn_2.pdf',...
+    'plots/chs_chcmp_opr_bkdn_3.pdf',...
+    'plots/chs_chcmp_opr_dpr.pdf',...
+    'plots/chs_chcmp_opr_dist.pdf',...
+    'plots/chs_chcmp_dpr_dist.pdf',...
+    'plots/chs_chcmp_ccwm_dist.pdf'};
+    
+
+append_pdfs('plots/chs_chcmp_pre_event_team_stats.pdf', filenames{:});
+
+for kk = 1:numel(filenames)
+    delete(filenames{kk});
+end

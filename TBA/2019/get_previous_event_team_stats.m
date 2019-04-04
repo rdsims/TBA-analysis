@@ -1,10 +1,10 @@
-function [team_num, stat_cols, OPR, DPR] = get_previous_event_team_stats(desired_teams)
+function [team_num, stat_cols, OPR, DPR] = get_previous_event_team_stats(desired_teams, last_week)
 
 team_num = [];
 OPR = [];
 DPR = [];
 
-for week = 0:4
+for week = 0:last_week
     directory = sprintf('data/week%d', week);
     
     events = dir(sprintf('%s/*.csv', directory));
@@ -39,6 +39,7 @@ desired_team_idx = ismember(team_num, desired_teams);
 team_num = team_num(desired_team_idx).';
 OPR = OPR(desired_team_idx,:);
 DPR = DPR(desired_team_idx,:);
+
 
 
 
