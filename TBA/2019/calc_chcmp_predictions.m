@@ -40,14 +40,17 @@ DPR(:,TOTAL) = sum(DPR(:,AUTO:CLIMB),2);
 
 
 % 686 Match Predictions
+team_686_prediction_title_str = 'chcmp_predictions_team_686';
 team_filter = 686;
 matches_per_sheet = 12;
-plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions_team_686', matches_per_sheet);
+plot_match_predictions(team_matrix, team_num, OPR, team_filter, team_686_prediction_title_str, matches_per_sheet);
 
 % All Match Predictions
+all_team_prediction_title_str = 'chcmp_predictions';
+all_team_match_prediction_title_str = [all_team_prediction_title_str '_matches'];
 team_filter = [];
 matches_per_sheet = 12;
-plot_match_predictions(team_matrix, team_num, OPR, team_filter, 'chs_dchmp_predictions', matches_per_sheet);
+plot_match_predictions(team_matrix, team_num, OPR, team_filter, all_team_match_prediction_title_str, matches_per_sheet);
 
 
 
@@ -86,6 +89,8 @@ for k=1:length(team_num)
 end
 xlim([0 length(team_num)+1]);
 
+set(gcf,'PaperUnits','inches','PaperSize',[8.5 11],'PaperOrientation','landscape');
+print('plots/rp_estimate.pdf','-dpdf', '-fillpage');
 
 
 
@@ -116,12 +121,16 @@ end
 xlim([0 length(team_num)+1]);
 ylim([floor(min(SoS)-1) ceil(max(SoS)+1)]);
 
+set(gcf,'PaperUnits','inches','PaperSize',[8.5 11],'PaperOrientation','landscape');
+print('plots/sos_estimate.pdf','-dpdf', '-fillpage');
 
 
 
+filenames = {['plots/' all_team_match_prediction_title_str '.pdf'],...
+    'plots/rp_estimate.pdf',...
+    'plots/sos_estimate.pdf'};
 
-
-filename = sprintf('plots/%s.pdf', title_str);
+filename = sprintf('plots/%s.pdf', all_team_prediction_title_str);
 append_pdfs(filename, filenames{:});
 
 for kk = 1:numel(filenames)
