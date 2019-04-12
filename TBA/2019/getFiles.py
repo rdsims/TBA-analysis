@@ -118,6 +118,34 @@ for event in event_list:
             
                     row += 1
             
+            else:
+                
+                for alliance in alliances:
+        
+                    team1 = int(match['alliances'][alliance]['teams'][0].replace("frc", ""))
+                    team2 = int(match['alliances'][alliance]['teams'][1].replace("frc", ""))
+                    team3 = int(match['alliances'][alliance]['teams'][2].replace("frc", ""))
+            
+                    rec[row] = (  match['match_number'],
+                                  match['comp_level'],
+                                  alliance,
+                                  team1,
+                                  team2,
+                                  team3,
+                                  0, #match['alliances'][alliance]['score'],
+                                  0, #match['score_breakdown'][alliance]['totalPoints'],
+                                  0, #match['score_breakdown'][alliance]['autoPoints'],
+                                  0, #match['score_breakdown'][alliance]['teleopPoints'],
+                                  0, #match['score_breakdown'][alliance]['hatchPanelPoints'],
+                                  0, #match['score_breakdown'][alliance]['cargoPoints'],
+                                  0, #match['score_breakdown'][alliance]['habClimbPoints'],
+                                  0, #match['score_breakdown'][alliance]['foulPoints'],
+                                  0, #match['score_breakdown'][alliance]['adjustPoints'],
+                                  0  #match['score_breakdown'][alliance]['sandStormBonusPoints']
+                                  )
+            
+                    row += 1
+
         rec = rec[0:row]    # remove unused rows
         
         if row == 0:

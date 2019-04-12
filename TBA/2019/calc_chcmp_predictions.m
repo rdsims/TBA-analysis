@@ -17,7 +17,7 @@ ADJUST  = 7;
 
 title_str = 'CHS District Champs Predictions';
 
-week = 5;
+week = 6;
 event_name = '2019chcmp.csv';
 filename = sprintf('data/week%d/%s', week, event_name);
 

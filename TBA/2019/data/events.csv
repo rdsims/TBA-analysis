@@ -34,7 +34,7 @@
 2019dal,Daly Division
 2019dar,Darwin Division
 2019flor,Orlando Regional
-2019flwp,South Florida Regional 
+2019flwp,South Florida Regional
 2019ftcmp,FIRST In Texas District Championship
 2019gaalb,PCH District Albany Event presented by Procter & Gamble
 2019gacmp,Peachtree District State Championship
@@ -54,7 +54,7 @@
 2019inmis,IN District St. Joseph Event
 2019inpr,Penn Robotics Scrimmage
 2019inwla,IN District Tippecanoe Event
-2019iscmp,FIRST Israel District Championship   ***See Site Information Document for more i
+2019iscmp,FIRST Israel District Championship
 2019isde1,ISR District Event #1
 2019isde2,ISR District Event #2
 2019isde3,ISR District Event #3
@@ -115,6 +115,7 @@
 2019mokc3,Central Missouri Regional
 2019mosl,St. Louis Regional
 2019mrcmp,FIRST Mid-Atlantic District Championship
+2019msbbb,Beach Bot Battle
 2019mxcm,Regional de la Ciudad de Mexico
 2019mxmo,Regional Monterrey
 2019mxto,Regional Laguna
@@ -131,13 +132,14 @@
 2019nhsnh,NE District Southern NH Event
 2019njbri,FMA District Bridgewater-Raritan Event
 2019njfla,FMA District Mount Olive Event
+2019njmm,Midknight Mayhem
 2019njski,FMA District Montgomery Event
 2019njtab,FMA District Seneca Event
 2019nvlv,Las Vegas Regional
 2019nyli,SBPLI Long Island Regional #1
-2019nyli2,SBPL2 Long Island Regional #2
+2019nyli2,SBPLI Long Island Regional #2
 2019nyny,New York City Regional
-2019nyro,Finger Lakes Regional 
+2019nyro,Finger Lakes Regional
 2019nyrra,Rochester Rally
 2019nysu,Hudson Valley Regional
 2019nytr,New York Tech Valley Regional
@@ -204,3 +206,4 @@
 2019week0,Week 0
 2019wila,Seven Rivers Regional
 2019wimi,Wisconsin Regional
+2019wiws,Seven Rivers Robotics Coalition Week Zero
