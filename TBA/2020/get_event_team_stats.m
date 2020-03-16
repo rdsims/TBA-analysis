@@ -8,47 +8,52 @@ if QUAL_MATCHES_ONLY
 else
     filter = '';
 end
-[header, data] = read_data_file(filename, filter);
-
-team_cols   = [find(strcmp(header,'team1')) : find(strcmp(header,'team3'))];
-score_col   = [find(strcmp(header,'score'))];
-auto_cols   = [find(strcmp(header,'autoPoints'))];
-teleop_cell_cols  = [find(strcmp(header,'teleopCellPoints'))];
-panel_cols  = [find(strcmp(header,'controlPanelPoints'))];
-endgame_col   = [find(strcmp(header,'endgamePoints'))];
-foul_col    = [find(strcmp(header,'foulPoints'))];
-adjust_col  = [find(strcmp(header,'adjustPoints'))];
+data = read_data_file(filename, filter);
 
 TOTAL = 1;
-AUTO  = 2;
-CELL  = 3;
-PANEL  = 4;
-ENDGAME = 5;
-FOUL  = 6;
-ADJUST  = 7;
+AUTO_DRIVE  = 2;
+AUTO_CELL_BOTTOM = 3;
+AUTO_CELL_OUTER = 4;
+AUTO_CELL_INNER = 5;
+TELEOP_CELL_BOTTOM  = 6;
+TELEOP_CELL_OUTER  = 7;
+TELEOP_CELL_INNER  = 8;
+TELEOP_PANEL  = 5; 
+ENDGAME_CLIMB = 6;
+ENDGAME_LEVEL = 7;
+FOUL  = 8;
+
+
 
 stat_cols{TOTAL} = 'Total';
-stat_cols{AUTO } = 'Auto';
-stat_cols{CELL } = 'Cell';
-stat_cols{PANEL } = 'Control Panel';
-stat_cols{ENDGAME} = 'Endgame';
+stat_cols{AUTO_DRIVE} = 'Auto Drive';
+stat_cols{AUTO_CELL_BOTTOM} = 'Auto Cell (Bottom)';
+stat_cols{AUTO_CELL_OUTER} = 'Auto Cell (Outer)';
+stat_cols{AUTO_CELL_INNER} = 'Auto Cell (Inner)';
+stat_cols{TELEOP_CELL_BOTTOM} = 'Teleop Cell (Bottom)';
+stat_cols{TELEOP_CELL_OUTER} = 'Teleop Cell (Outer)';
+stat_cols{TELEOP_CELL_INNER} = 'Teleop Cell (Inner)';
+stat_cols{TELEOP_PANEL} = 'Control Panel';
+stat_cols{ENDGAME_CLIMB} = 'Endgame Climb';
+stat_cols{ENDGAME_LEVEL} = 'Endgame Level';
 stat_cols{FOUL } = 'Foul';
-stat_cols{ADJUST} = 'Adjust';
 
 
 if ~isempty(data)
-    team_matrix = cell2mat(data(:,team_cols));    
+    team_matrix = [data.team1 data.team2 data.team3];    
     team_num = unique(team_matrix);
     num_teams = length(team_num);
     
     score = zeros(size(data,1), FOUL);
-    score(:,TOTAL) = cell2mat(data(:,score_col));
-    score(:,AUTO)  = sum(cell2mat(data(:,auto_cols)),2);
-    score(:,CELL)  = sum(cell2mat(data(:,teleop_cell_cols)),2);
-    score(:,PANEL)  = sum(cell2mat(data(:,panel_cols)),2);
-    score(:,ENDGAME) = cell2mat(data(:,endgame_col));
-    score(:,FOUL)  = cell2mat(data(:,foul_col));
-    score(:,ADJUST)  = cell2mat(data(:,adjust_col));
+    score(:,TOTAL) = data.score;
+    score(:,AUTO_CELL_BOTTOM) = data.autoCellsBottom;
+    score(:,AUTO_CELL_OUTER) = data.autoCellsOuter;
+    score(:,AUTO_CELL_INNER) = data.autoCellsInner;
+    score(:,TELEOP_CELL_BOTTOM) = data.teleopCellsBottom;
+    score(:,TELEOP_CELL_OUTER) = data.teleopCellsOuter;
+    score(:,TELEOP_CELL_INNER) = data.teleopCellsInner;
+    score(:,TELEOP_PANEL)  = data.controlPanelPoints;
+    score(:,FOUL)  = data.foulPoints;
     
     if RANKING_POINTS_TO_SCORE
     % convert ranking points to points
@@ -86,9 +91,9 @@ if ~isempty(data)
 
 end
 
-        Team_Matrix = Team_Matrix(2*30:end,:);
-        Score_For = Score_For(2*30:end,:);
-        Score_Against = Score_Against(2*30:end,:);
+%         Team_Matrix = Team_Matrix(2*30:end,:);
+%         Score_For = Score_For(2*30:end,:);
+%         Score_Against = Score_Against(2*30:end,:);
 
 % solve Team_Matrix*OPR = Score_For for OPR
 % solve Team_Matrix*DPR = Score_Against for DPR
@@ -101,6 +106,55 @@ for k=1:size(Score_For,2)
 end
 
 
+team_matrix = [data.team1 data.team2 data.team3];    
+team_num = unique(team_matrix);
 
+% assign points that can be directly attributed
+for t=1:numel(team_num)
+    match_cnt = 0;
+    idx = find(data.team1 == team_num(t));
+    match_cnt = match_cnt + numel(idx);
+    OPR(t,AUTO_DRIVE) = OPR(t,AUTO_DRIVE) + sum(data.initLineRobot1(idx));
+    OPR(t,ENDGAME_CLIMB) = OPR(t,ENDGAME_CLIMB) + sum(data.endgameRobot1(idx));
+    for k=idx
+        if data.numberOfClimbers(k)
+            OPR(t,ENDGAME_LEVEL) = OPR(t,ENDGAME_LEVEL) + sum(data.endgameRungIsLevel(k) ./ data.numberOfClimbers(k));
+        end
+    end
+    
+    idx = find(data.team2 == team_num(t));
+    match_cnt = match_cnt + numel(idx);
+    OPR(t,AUTO_DRIVE) = OPR(t,AUTO_DRIVE) + sum(data.initLineRobot2(idx));
+    OPR(t,ENDGAME_LEVEL) = OPR(t,ENDGAME_CLIMB) + sum(data.endgameRobot2(idx));
+    for k=idx
+        if data.numberOfClimbers(k)
+            OPR(t,ENDGAME_LEVEL) = OPR(t,ENDGAME_LEVEL) + sum(data.endgameRungIsLevel(k) ./ data.numberOfClimbers(k));
+        end
+    end
+    
+    idx = find(data.team3 == team_num(t));
+    match_cnt = match_cnt + numel(idx);
+    OPR(t,AUTO_DRIVE) = OPR(t,AUTO_DRIVE) + sum(data.initLineRobot3(idx));
+    OPR(t,ENDGAME_CLIMB) = OPR(t,ENDGAME_CLIMB) + sum(data.endgameRobot3(idx));
+    for k=idx
+        if data.numberOfClimbers(k)
+            OPR(t,ENDGAME_LEVEL) = OPR(t,ENDGAME_LEVEL) + sum(data.endgameRungIsLevel(k) ./ data.numberOfClimbers(k));
+        end
+    end
+    
+    OPR(t,AUTO_DRIVE) = OPR(t,AUTO_DRIVE) / match_cnt;
+    OPR(t,ENDGAME_CLIMB) = OPR(t,ENDGAME_CLIMB) / match_cnt;
+    OPR(t,ENDGAME_LEVEL) = OPR(t,ENDGAME_LEVEL) / match_cnt;   
+end
 
+stat_cols{AUTO_DRIVE} = 'Auto Drive';
+stat_cols{AUTO_CELL_BOTTOM} = 'Auto Cell (Bottom)';
+stat_cols{AUTO_CELL_OUTER} = 'Auto Cell (Outer)';
+stat_cols{AUTO_CELL_INNER} = 'Auto Cell (Inner)';
+stat_cols{TELEOP_CELL_BOTTOM} = 'Teleop Cell (Bottom)';
+stat_cols{TELEOP_CELL_OUTER} = 'Teleop Cell (Outer)';
+stat_cols{TELEOP_CELL_INNER} = 'Teleop Cell (Inner)';
+stat_cols{TELEOP_PANEL} = 'Control Panel';
+stat_cols{ENDGAME_CLIMB} = 'Endgame Climb';
+stat_cols{ENDGAME_LEVEL} = 'Endgame Level';
 

@@ -40,16 +40,34 @@ for week = 0:1
     end
 end
 
+% detailed OPR
+DETAILED_TOTAL = 1;
+DETAILED_AUTO_DRIVE  = 2;
+DETAILED_AUTO_CELL_BOTTOM = 3;
+DETAILED_AUTO_CELL_OUTER = 4;
+DETAILED_AUTO_CELL_INNER = 5;
+DETAILED_TELEOP_CELL_BOTTOM  = 6;
+DETAILED_TELEOP_CELL_OUTER  = 7;
+DETAILED_TELEOP_CELL_INNER  = 8;
+DETAILED_TELEOP_PANEL  = 5; 
+DETAILED_ENDGAME_CLIMB = 6;
+DETAILED_ENDGAME_LEVEL = 7;
+DETAILED_FOUL  = 8;
+
+% summary OPR
 TOTAL = 1;
 AUTO  = 2;
-CELL  = 3;
-PANEL  = 4;
-ENDGAME = 5;
-FOUL  = 6;
-ADJUST  = 7;
+TELEOP_CELL  = 4;
+TELEOP_PANEL  = 5; 
+ENDGAME_CLIMB = 6;
+ENDGAME_LEVEL = 7;
+FOUL  = 8;
 
-
-
+detailedOPR = OPR;
+detailedDPR = DPR;
+OPR(:,AUTO) = sum(detailedOPR(:,DETAILED_AUTO_DRIVE:DETAILED_AUTO_CELL_INNER),2);
+OPR(:,TELEOP_CELL) = sum(detailedOPR(:,DETAILED_TELEOP_CELL_BOTTOM:DETAILED_TELEOP_CELL_INNER),2);
+OPR(:,TELEOP_PANEL:FOUL) = detailedOPR(:,DETAILED_TELEOP_PANEL:DETAILED_FOUL);
 
 chs_team_idx = ismember(team_num, chs_teams);
 team_num = team_num(chs_team_idx).';
@@ -77,11 +95,11 @@ title('Chesapeake District Teams');
 
 
 figure;
-bar(1:length(team_num), sorted_OPR(:,[ENDGAME CELL PANEL AUTO FOUL ADJUST]), 'stacked');
+bar(1:length(team_num), sorted_OPR(:,[ENDGAME_CLIMB TELEOP_CELL AUTO_CELL AUTO_DRIVE ENDGAME_LEVEL TELEOP_PANEL FOUL]), 'stacked');
 grid on;
 ylabel('OPR');
 title('Chesapeake District Teams');
-legend('Endgame', 'TeleopCell', 'ControlPanel', 'Auto', 'Foul', 'Adjust', 'Location', 'NorthWest');
+legend('Climb', 'TeleopCell', 'AutoCell', 'AutoDrive', 'LevelClimb', 'ControlPanel', 'Foul', 'Location', 'NorthWest');
 for k=1:length(team_num)
     h = text(k,sorted_OPR(k)+1,num2str(sorted_team_num(k),'%d'),...
         'Rotation',90,'HorizontalAlignment','Left','VerticalAlignment','Middle','FontSize',font_size);
